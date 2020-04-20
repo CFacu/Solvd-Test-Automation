@@ -11,6 +11,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public class Client extends Person implements ITransaction {
     private final Logger LOGGER = LogManager.getLogger(Client.class);
@@ -18,15 +19,17 @@ public class Client extends Person implements ITransaction {
     private CreditCard creditCard = new CreditCard();
     private CreditHistory creditHistory = new CreditHistory();
     private BigDecimal salary;
+    private Integer clientId;
 
     public Client() {
     }
 
-    public Client(Account bankAccount, CreditCard creditCard, CreditHistory creditHistory, BigDecimal salary) {
+    public Client(Account bankAccount, CreditCard creditCard, CreditHistory creditHistory, BigDecimal salary, Integer clientId) {
         this.bankAccount = bankAccount;
         this.creditCard = creditCard;
         this.creditHistory = creditHistory;
         this.salary = salary;
+        this.clientId = clientId;
     }
 
     public Account getBankAccount() {
@@ -59,6 +62,14 @@ public class Client extends Person implements ITransaction {
 
     public void setSalary(BigDecimal salary) {
         this.salary = salary;
+    }
+
+    public Integer getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(Integer clientId) {
+        this.clientId = clientId;
     }
 
     @Override
@@ -94,5 +105,21 @@ public class Client extends Person implements ITransaction {
         } catch (LoanNotFoundException e) {
             LOGGER.error(e);
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Client client = (Client) o;
+
+        return clientId == client.getClientId() && clientId.equals(client.getClientId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(clientId);
     }
 }

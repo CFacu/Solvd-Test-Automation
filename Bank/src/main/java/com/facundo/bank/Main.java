@@ -3,6 +3,7 @@ package com.facundo.bank;
 import com.facundo.bank.banks.Account;
 import com.facundo.bank.banks.PrivateBank;
 import com.facundo.bank.exceptions.LoanAmountNotValidException;
+import com.facundo.bank.lambdas.ISearch;
 import com.facundo.bank.people.clients.Client;
 import com.facundo.bank.people.employee.Analyst;
 import com.facundo.bank.people.employee.ManagingDirector;
@@ -21,6 +22,14 @@ public class Main {
         client.setLastName("Rogers");
         client.setAge(30);
         client.setSalary(BigDecimal.valueOf(1500));
+        client.setClientId(35);
+
+        Client clientTwo = new Client();
+        clientTwo.setName("Bob");
+        clientTwo.setLastName("Dylan");
+        clientTwo.setAge(26);
+        clientTwo.setSalary(BigDecimal.valueOf(2000));
+        clientTwo.setClientId(53);
 
         PrivateBank privateBank = new PrivateBank();
         privateBank.setName("Bank of America");
@@ -51,11 +60,23 @@ public class Main {
 
         LOGGER.info(client.toString());
 
+        ISearch<Client> search = clientSearch -> {
+            for (Client c : privateBank.getClients()) {
+                if (c.equals(clientSearch)) return true;
+            }
+            return false;
+        };
+
         try {
-            analyst.newLoan(client, BigDecimal.valueOf(10000), (short)15, 600);
+            if (search.searchObject(client)){
+                analyst.newLoan(client, BigDecimal.valueOf(10000), (short)15, 600);
+            } else {
+                LOGGER.info("It's not a client of the bank.");
+            }
         } catch (LoanAmountNotValidException e) {
             LOGGER.error(e);
         }
+
 
         LOGGER.info("Client account balance: ");
         LOGGER.info(client.getBankAccount().getBalance());
