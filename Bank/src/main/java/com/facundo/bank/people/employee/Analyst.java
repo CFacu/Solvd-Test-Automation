@@ -6,6 +6,7 @@ import com.facundo.bank.banks.PrivateBank;
 import com.facundo.bank.banks.StateBank;
 import com.facundo.bank.enums.Salary;
 import com.facundo.bank.exceptions.LoanAmountNotValidException;
+import com.facundo.bank.lambdas.ISearch;
 import com.facundo.bank.people.Person;
 import com.facundo.bank.people.clients.Client;
 import org.apache.logging.log4j.LogManager;
