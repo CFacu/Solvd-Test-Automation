@@ -6,7 +6,6 @@ import com.facundo.bank.banks.PrivateBank;
 import com.facundo.bank.banks.StateBank;
 import com.facundo.bank.enums.Salary;
 import com.facundo.bank.exceptions.LoanAmountNotValidException;
-import com.facundo.bank.lambdas.ISearch;
 import com.facundo.bank.people.Person;
 import com.facundo.bank.people.clients.Client;
 import org.apache.logging.log4j.LogManager;
@@ -45,11 +44,11 @@ public class Analyst extends Person implements IWork {
 
     public void newLoan(Client client, BigDecimal amount, Short rate, Integer number) throws LoanAmountNotValidException {
         List<Loan> loanHistory = client.getCreditHistory().getLoans();
-        for (Loan l : loanHistory) {
-            if (l.getClosed().equals(false)) {
-                LOGGER.error("This client already has an active loan.");
-                return;
-            }
+
+        boolean notClosed = loanHistory.stream().anyMatch(c -> c.getClosed().equals(false));
+        if (notClosed) {
+            LOGGER.error("This client already has an active loan.");
+            return;
         }
 
         if (amount.compareTo(BigDecimal.valueOf(1000)) < 0){
@@ -64,12 +63,13 @@ public class Analyst extends Person implements IWork {
 
     @Override
     public boolean doValuation(Client client, AbstractBank bank) {
-        for (Client c : bank.getClients()) {
-            if (c.equals(client)) {
-                LOGGER.error("It's already a client of the bank.");
-                return false;
-            }
+
+        boolean isClient = bank.getClients().stream().anyMatch(c -> c.equals(client));
+        if (isClient) {
+            LOGGER.error("It's already a client of the bank.");
+            return false;
         }
+
         if (bank.getClass().getSimpleName().equals("PrivateBank")) {
             if (client.getSalary().compareTo(PrivateBank.getMINIMUM_LOAN()) >= 0) {
                 LOGGER.info("The client satisfy the required salary.");

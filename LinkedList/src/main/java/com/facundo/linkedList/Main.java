@@ -12,18 +12,23 @@ public class Main {
         list.add(98);
         list.add(88);
         list.add(15);
+        list.add(20);
+        list.add(29);
 
-        LOGGER.info("First list.");
+        list.add(5,56);
+
+        list.addAtStart(1);
+
+        list.addAtEnd(99);
+
+        LOGGER.info("First List:");
         list.show();
 
-        list.remove(2);
-        list.addAtStart(55);
-
-        LOGGER.info("Second list");
-        list.show();
-
+        LOGGER.info("\n");
+        LOGGER.info("Reversed List:");
         list = list.reverse();
-        LOGGER.info("Reverse list");
+
         list.show();
+
     }
 }

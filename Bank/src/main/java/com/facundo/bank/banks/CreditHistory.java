@@ -32,14 +32,8 @@ public class CreditHistory {
     }
 
     public Loan getLoan(Integer number) throws LoanNotFoundException{
-        for (Loan l : loans) {
-            if (l.getNumber().equals(number)) {
-                return l;
-            }
-            else {
-                throw new LoanNotFoundException("Loan not found!");
-            }
-        }
-        return null;
+        if (loans.stream().anyMatch(l -> l.getNumber().equals(number))) {
+            return loans.stream().filter(a -> a.getNumber().equals(number)).findAny().get();
+        } else throw new LoanNotFoundException("Loan not found.");
     }
 }

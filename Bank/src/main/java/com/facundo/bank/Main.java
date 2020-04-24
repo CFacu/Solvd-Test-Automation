@@ -60,12 +60,7 @@ public class Main {
 
         LOGGER.info(client.toString());
 
-        ISearch<Client> search = clientSearch -> {
-            for (Client c : privateBank.getClients()) {
-                if (c.equals(clientSearch)) return true;
-            }
-            return false;
-        };
+        ISearch<Client> search = clientSearch -> privateBank.getClients().stream().anyMatch(c -> c.equals(clientSearch));
 
         try {
             if (search.searchObject(client)){
