@@ -7,7 +7,20 @@ import java.util.Iterator;
 
 public class MyLinkedList<T> implements Iterable<Node>{
     private final Logger LOGGER = LogManager.getLogger(MyLinkedList.class);
-    private Node first;
+    private Node<T> first;
+    private Node<T> last;
+
+    public MyLinkedList() {
+        first = last = null;
+    }
+
+    public Node<T> getLast() {
+        return last;
+    }
+
+    public Node<T> getFirst() {
+        return first;
+    }
 
     public void add(T data) {
         Node<T> node = new Node<T>();
@@ -15,13 +28,12 @@ public class MyLinkedList<T> implements Iterable<Node>{
         node.setNext(null);
 
         if (first == null) {
-            first = node;
+            node.setPrev(null);
+            first = last = node;
         } else {
-            Node n = first;
-            while (n.getNext() != null) {
-                n = n.getNext();
-            }
-            n.setNext(node);
+            node.setPrev(last);
+            last.setNext(node);
+            last = node;
         }
     }
 
@@ -29,14 +41,18 @@ public class MyLinkedList<T> implements Iterable<Node>{
         Node<T> node = new Node<T>();
         node.setData(data);
         node.setNext(null);
-        Node n = first;
+        node.setPrev(null);
+        Node<T> n = first;
 
         if (index == 0) addAtStart(data);
         else {
             for (int i = 0; i < index - 1; i++) {
                 n = n.getNext();
             }
-            node.setNext(n.getNext());
+            Node<T> aux = n.getNext();
+            node.setNext(aux);
+            aux.setPrev(node);
+            node.setPrev(n);
             n.setNext(node);
         }
     }
@@ -45,19 +61,31 @@ public class MyLinkedList<T> implements Iterable<Node>{
         Node<T> node = new Node<T>();
         node.setData(data);
         node.setNext(first);
+        node.setPrev(null);
+        first.setPrev(node);
         first = node;
+    }
+
+    public void addAtEnd(T data) {
+        Node<T> node = new Node<T>();
+        node.setData(data);
+        node.setNext(null);
+        node.setPrev(last);
+        last.setNext(node);
+        last = node;
     }
 
     public void remove(int index) {
         if (index == 0) {
             first = first.getNext();
         }else {
-            Node node = first;
-            Node n;
+            Node<T> node = first;
+            Node<T> n;
             for (int i = 0; i < index-1; i++) {
                 node = node.getNext();
             }
             n = node.getNext();
+            n.getNext().setPrev(node);
             node.setNext(n.getNext());
             n = null;
         }
@@ -69,14 +97,14 @@ public class MyLinkedList<T> implements Iterable<Node>{
         }
     }
 
-    public MyLinkedList reverse() {
-        MyLinkedList newList = new MyLinkedList<>();
-        Node node = first;
-        while (node.getNext() != null) {
-            newList.addAtStart(node.getData());
-            node = node.getNext();
+    public MyLinkedList<T> reverse() {
+        MyLinkedList<T> newList = new MyLinkedList<>();
+        Node<T> node = last;
+        while(node.getPrev() != null) {
+            newList.add(node.getData());
+            node = node.getPrev();
         }
-        newList.addAtStart(node.getData());
+        newList.add(node.getData());
         return newList;
     }
 

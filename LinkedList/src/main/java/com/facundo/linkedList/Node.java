@@ -2,7 +2,8 @@ package com.facundo.linkedList;
 
 public class Node<T> {
     private T data;
-    private Node next;
+    private Node<T> next;
+    private Node<T> prev;
 
     public Node() {}
 
@@ -14,11 +15,19 @@ public class Node<T> {
         this.data = data;
     }
 
-    public Node getNext() {
+    public Node<T> getNext() {
         return next;
     }
 
-    public void setNext(Node next) {
+    public void setNext(Node<T> next) {
         this.next = next;
+    }
+
+    public Node<T> getPrev() {
+        return prev;
+    }
+
+    public void setPrev(Node<T> prev) {
+        this.prev = prev;
     }
 }

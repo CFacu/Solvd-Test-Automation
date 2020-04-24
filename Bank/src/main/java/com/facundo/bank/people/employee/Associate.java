@@ -39,11 +39,10 @@ public class Associate extends Person implements IWork{
 
     @Override
     public boolean doValuation(Client client, AbstractBank bank) {
-        for (Client c : bank.getClients()) {
-            if (c.equals(client)) {
-                LOGGER.error("It's already a client of the bank.");
-                return false;
-            }
+        boolean isClient = bank.getClients().stream().anyMatch(c -> c.equals(client));
+        if (isClient) {
+            LOGGER.error("It's already a client of the bank.");
+            return false;
         }
         if (bank.getClass().getSimpleName().equals("PrivateBank")) {
             if (client.getSalary().compareTo(BigDecimal.valueOf(1000)) >= 0) {
