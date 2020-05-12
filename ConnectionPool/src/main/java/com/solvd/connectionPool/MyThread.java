@@ -44,7 +44,7 @@ public class MyThread implements Runnable{
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        //pool.releaseConnection(connection);
+        pool.releaseConnection(connection);
 
     }
 }
