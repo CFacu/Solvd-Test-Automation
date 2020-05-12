@@ -6,35 +6,47 @@ import org.apache.logging.log4j.Logger;
 public class MyThread implements Runnable{
 
     private final Logger LOGGER = LogManager.getLogger(MyThread.class);
-    private String name;
+    private String threadName;
+    private ConnectionPool pool;
 
     public MyThread() {}
 
-    public MyThread(String name) {
-        this.name = name;
+    public MyThread(String threadName, ConnectionPool pool) {
+        this.threadName = threadName;
+        this.pool = pool;
     }
 
-    public String getName() {
-        return name;
+    public String getThreadName() {
+        return threadName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setThreadName(String name) {
+        this.threadName = name;
     }
 
     @Override
     public String toString() {
-        return name;
+        return threadName;
     }
 
     @Override
-    public void run(){
+    public synchronized void run(){
+        String connection = null;
         try {
-            LOGGER.info("Started " + this.name);
-            Thread.sleep(2000);
-            LOGGER.info("Finished " + this.name);
+            connection = pool.getConnection();
+            if (connection == null ) LOGGER.info("Error getting connection");
+            else LOGGER.info("Executing " + threadName);
         } catch (InterruptedException e) {
             LOGGER.error(e);
         }
+
+        try {
+            Thread.sleep(5000);
+            pool.releaseConnection(connection);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        LOGGER.info("Finished " + threadName);
+
     }
 }
