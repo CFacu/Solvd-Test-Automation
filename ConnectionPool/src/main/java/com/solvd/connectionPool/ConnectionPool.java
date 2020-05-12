@@ -8,8 +8,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class ConnectionPool {
     private final Logger LOGGER = LogManager.getLogger(ConnectionPool.class);
-    private LinkedBlockingQueue<MyThread> poolQueue;
-    private final int POOL_SIZE = 10;
+    private LinkedBlockingQueue<String> poolQueue;
+    private final Integer POOL_SIZE = 10;
     private AtomicInteger activeConnections = new AtomicInteger(0);
     private static ConnectionPool INSTANCE;
 
@@ -19,7 +19,9 @@ public class ConnectionPool {
 
     public static ConnectionPool getInstance() {
         if (INSTANCE == null){
-            INSTANCE = new ConnectionPool();
+            synchronized (ConnectionPool.class) {
+                INSTANCE = new ConnectionPool();
+            }
         }
         return INSTANCE;
     }
@@ -32,32 +34,29 @@ public class ConnectionPool {
         return POOL_SIZE;
     }
 
-    public MyThread getConnection() {
-        if (getActiveConnections().get() < getPOOL_SIZE()) {
-            poolQueue.add(new MyThread("Mock Connection"));
-            getActiveConnections().incrementAndGet();
+    public String getConnection() throws InterruptedException {
+        if (poolQueue.size() == 0 && activeConnections.get() < POOL_SIZE) {
+            synchronized (ConnectionPool.class) {
+                INSTANCE.init();
+                getActiveConnections().incrementAndGet();
+            }
         }
-        MyThread conn = null;
-
-        try {
-            conn = poolQueue.take();
-        } catch (InterruptedException e) {
-            LOGGER.error(e);
-        }
-        return conn;
+        return poolQueue.poll();
     }
 
-    public void releaseConnection(MyThread connection) {
-        try {
-            poolQueue.put(connection);
-        } catch (InterruptedException e) {
-            LOGGER.error(e);
+    public void releaseConnection(String connection) {
+        if (connection != null) {
+            try {
+                poolQueue.put(connection);
+            } catch (InterruptedException e) {
+                LOGGER.error(e);
+            }
         }
     }
 
     public void closeAllConnections() {
         while (activeConnections.get() > 0) {
-            MyThread connection;
+            String connection;
             try {
                 connection = poolQueue.take();
             } catch (InterruptedException e) {
@@ -67,9 +66,12 @@ public class ConnectionPool {
         }
     }
 
-    @Override
-    public String toString() {
-        return "ConnectionPool{" +
-                "connections=" + poolQueue.toString() + "}";
+    public void init(){
+        try {
+            poolQueue.put(" Connection " + getActiveConnections());
+        } catch (InterruptedException e) {
+            LOGGER.info(e);
+        }
+
     }
 }
