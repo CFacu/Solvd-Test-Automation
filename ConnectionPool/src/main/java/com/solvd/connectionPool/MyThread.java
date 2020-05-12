@@ -34,19 +34,17 @@ public class MyThread implements Runnable{
         String connection = null;
         try {
             connection = pool.getConnection();
-            if (connection == null ) LOGGER.info("Error getting connection");
-            else LOGGER.info("Executing " + threadName);
         } catch (InterruptedException e) {
             LOGGER.error(e);
         }
-
+        LOGGER.info("Executing " + threadName);
         try {
-            Thread.sleep(5000);
-            pool.releaseConnection(connection);
+            Thread.sleep(3000);
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        LOGGER.info("Finished " + threadName);
+        //pool.releaseConnection(connection);
 
     }
 }

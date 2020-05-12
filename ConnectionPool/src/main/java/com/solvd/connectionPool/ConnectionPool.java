@@ -20,7 +20,9 @@ public class ConnectionPool {
     public static ConnectionPool getInstance() {
         if (INSTANCE == null){
             synchronized (ConnectionPool.class) {
-                INSTANCE = new ConnectionPool();
+                if (INSTANCE == null) {
+                    INSTANCE = new ConnectionPool();
+                }
             }
         }
         return INSTANCE;
@@ -37,8 +39,10 @@ public class ConnectionPool {
     public String getConnection() throws InterruptedException {
         if (poolQueue.size() == 0 && activeConnections.get() < POOL_SIZE) {
             synchronized (ConnectionPool.class) {
-                INSTANCE.init();
-                getActiveConnections().incrementAndGet();
+                if (poolQueue.size() == 0 && activeConnections.get() < POOL_SIZE) {
+                    INSTANCE.init();
+                    getActiveConnections().incrementAndGet();
+                }
             }
         }
         return poolQueue.poll();
