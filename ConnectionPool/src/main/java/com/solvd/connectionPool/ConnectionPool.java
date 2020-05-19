@@ -45,7 +45,7 @@ public class ConnectionPool {
                 }
             }
         }
-        return poolQueue.poll();
+        return poolQueue.take();
     }
 
     public void releaseConnection(String connection) {
