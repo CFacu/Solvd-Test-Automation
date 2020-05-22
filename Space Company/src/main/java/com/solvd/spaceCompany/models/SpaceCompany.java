@@ -7,16 +7,16 @@ public class SpaceCompany {
     private String name;
     private List<Station> stations;
     private List<Engineer> engineers;
-    private CEO ceo;
+    private List<Rocket> rockets;
 
     public SpaceCompany() {
     }
 
-    public SpaceCompany(String name, List<Station> stations, List<Engineer> engineers, CEO ceo) {
+    public SpaceCompany(String name, List<Station> stations, List<Engineer> engineers, List<Rocket> rockets) {
         this.name = name;
         this.stations = stations;
         this.engineers = engineers;
-        this.ceo = ceo;
+        this.rockets = rockets;
     }
 
     public Long getId() {
@@ -51,11 +51,11 @@ public class SpaceCompany {
         this.engineers = engineers;
     }
 
-    public CEO getCeo() {
-        return ceo;
+    public List<Rocket> getRockets() {
+        return rockets;
     }
 
-    public void setCeo(CEO ceo) {
-        this.ceo = ceo;
+    public void setRockets(List<Rocket> rockets) {
+        this.rockets = rockets;
     }
 }

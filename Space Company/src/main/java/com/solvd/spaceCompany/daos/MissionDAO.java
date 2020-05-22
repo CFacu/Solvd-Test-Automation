@@ -21,17 +21,17 @@ public class MissionDAO implements IDAO<Mission> {
                     "VALUES (?, ?, ?)";
 
     private static final String GET_MISSION =
-            "SELECT * FROM Mission WHERE id=?";
+            "SELECT * FROM Mission WHERE id = ?";
 
     private static final String GET_ALL_MISSIONS =
             "SELECT * FROM Mission";
 
     private static final String UPDATE_MISSION =
-            "UPDATE Mission" +
-                    "SET name, objective, span_in_years WHERE id=?";
+            "UPDATE Mission " +
+                    "SET name = ?, objective = ?, span_in_years = ? WHERE id = ?";
 
     private static final String DELETE_MISSION =
-            "DELETE Mission" +
+            "DELETE Mission " +
                     "WHERE id=?";
 
     @Override
@@ -93,7 +93,7 @@ public class MissionDAO implements IDAO<Mission> {
     }
 
     @Override
-    public void insert(Mission mission, Long spaceCompanyId) {
+    public void insert(Mission mission) {
         Connection connection = ConnectionPool.getInstance().getConnection();
         try {
             connection.setAutoCommit(false);
@@ -103,6 +103,12 @@ public class MissionDAO implements IDAO<Mission> {
             ps.setInt(3, mission.getSpan());
 
             ps.executeUpdate();
+
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                mission.setId(rs.getLong(1));
+            }
+
             connection.commit();
 
         } catch (SQLException e) {
@@ -117,7 +123,7 @@ public class MissionDAO implements IDAO<Mission> {
     }
 
     @Override
-    public void update(Mission mission, Long spaceCompanyId) {
+    public void update(Mission mission, Long id) {
         Connection connection = ConnectionPool.getInstance().getConnection();
         try {
             connection.setAutoCommit(false);
@@ -125,6 +131,8 @@ public class MissionDAO implements IDAO<Mission> {
             ps.setString(1, mission.getName());
             ps.setString(2, mission.getObjective());
             ps.setInt(3, mission.getSpan());
+            ps.setLong(4, id);
+
             ps.executeUpdate();
             connection.commit();
 

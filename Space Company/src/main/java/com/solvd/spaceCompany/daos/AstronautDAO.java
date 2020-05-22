@@ -22,18 +22,18 @@ public class AstronautDAO implements IDAO<Astronaut> {
                     "VALUES (?, ?, ?, ?, ?)";
 
     private static final String GET_ASTRONAUT =
-            "SELECT * FROM Astronauts WHERE id=?";
+            "SELECT * FROM Astronauts WHERE id = ?";
 
     private static final String GET_ALL_ASTRONAUTS =
             "SELECT * FROM Astronauts";
 
     private static final String UPDATE_ASTRONAUT =
-            "UPDATE Astronauts" +
-                    "SET first_name, last_name, age, duty, stations_id WHERE id=?";
+            "UPDATE Astronauts " +
+                    "SET first_name = ?, last_name = ?, age = ?, duty = ?, stations_id = ? WHERE id = ?";
 
     private static final String DELETE_ASTRONAUT =
-            "DELETE Astronauts" +
-                    "WHERE id=?";
+            "DELETE Astronauts " +
+                    "WHERE id = ?";
 
     @Override
     public Astronaut get(Long id) {
@@ -96,7 +96,7 @@ public class AstronautDAO implements IDAO<Astronaut> {
     }
 
     @Override
-    public void insert(Astronaut astronaut, Long stationsId) {
+    public void insert(Astronaut astronaut) {
         Connection connection = ConnectionPool.getInstance().getConnection();
         try {
             connection.setAutoCommit(false);
@@ -105,9 +105,15 @@ public class AstronautDAO implements IDAO<Astronaut> {
             ps.setString(2, astronaut.getLastName());
             ps.setInt(3, astronaut.getAge());
             ps.setString(4, astronaut.getDuty());
-            ps.setLong(5, stationsId);
+            ps.setLong(5, astronaut.getStation().getId());
 
             ps.executeUpdate();
+
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                astronaut.setId(rs.getLong(1));
+            }
+
             connection.commit();
 
         } catch (SQLException e) {
@@ -122,7 +128,7 @@ public class AstronautDAO implements IDAO<Astronaut> {
     }
 
     @Override
-    public void update(Astronaut astronaut, Long stationsId) {
+    public void update(Astronaut astronaut, Long id) {
         Connection connection = ConnectionPool.getInstance().getConnection();
         try {
             connection.setAutoCommit(false);
@@ -131,7 +137,8 @@ public class AstronautDAO implements IDAO<Astronaut> {
             ps.setString(2, astronaut.getLastName());
             ps.setInt(3, astronaut.getAge());
             ps.setString(4, astronaut.getDuty());
-            ps.setLong(5, stationsId);
+            ps.setLong(5, astronaut.getStation().getId());
+            ps.setLong(6, id);
             ps.executeUpdate();
             connection.commit();
 

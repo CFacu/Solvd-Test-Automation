@@ -71,7 +71,14 @@ public class ConnectionPool {
                 }
             }
         }
-        return connectionPool.take();
+
+        try {
+            return connectionPool.take();
+        } catch (InterruptedException e) {
+            LOGGER.error(e);
+        }
+
+        return null;
     }
 
     public void closeAll() throws SQLException, InterruptedException {

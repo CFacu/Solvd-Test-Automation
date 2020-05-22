@@ -21,18 +21,18 @@ public class SpaceCompanyDAO implements IDAO<SpaceCompany> {
                     "VALUES (?)";
 
     private static final String GET_SPACE_COMPANY =
-            "SELECT * FROM Space_Company WHERE id=?";
+            "SELECT * FROM Space_Company WHERE id = ?";
 
     private static final String GET_ALL_SPACE_COMPANIES =
             "SELECT * FROM Space_Company";
 
     private static final String UPDATE_SPACE_COMPANY =
-            "UPDATE Space_Company" +
-                    "SET name WHERE id=?";
+            "UPDATE Space_Company " +
+                    "SET name = ? WHERE id = ?";
 
     private static final String DELETE_SPACE_COMPANY =
-            "DELETE Space_Company" +
-                    "WHERE id=?";
+            "DELETE Space_Company " +
+                    "WHERE id = ?";
 
     @Override
     public SpaceCompany get(Long id) {
@@ -91,7 +91,7 @@ public class SpaceCompanyDAO implements IDAO<SpaceCompany> {
     }
 
     @Override
-    public void insert(SpaceCompany spaceCompany, Long spaceCompanyId) {
+    public void insert(SpaceCompany spaceCompany) {
         Connection connection = ConnectionPool.getInstance().getConnection();
         try {
             connection.setAutoCommit(false);
@@ -99,6 +99,12 @@ public class SpaceCompanyDAO implements IDAO<SpaceCompany> {
             ps.setString(1, spaceCompany.getName());
 
             ps.executeUpdate();
+
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                spaceCompany.setId(rs.getLong(1));
+            }
+
             connection.commit();
 
         } catch (SQLException e) {
@@ -113,12 +119,14 @@ public class SpaceCompanyDAO implements IDAO<SpaceCompany> {
     }
 
     @Override
-    public void update(SpaceCompany spaceCompany, Long spaceCompanyId) {
+    public void update(SpaceCompany spaceCompany, Long id) {
         Connection connection = ConnectionPool.getInstance().getConnection();
         try {
             connection.setAutoCommit(false);
             PreparedStatement ps = connection.prepareStatement(UPDATE_SPACE_COMPANY);
             ps.setString(1, spaceCompany.getName());
+            ps.setLong(2, id);
+
             ps.executeUpdate();
             connection.commit();
 

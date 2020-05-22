@@ -2,7 +2,6 @@ package com.solvd.spaceCompany.daos;
 
 import com.solvd.spaceCompany.ConnectionPool;
 import com.solvd.spaceCompany.daos.interfaces.IDAO;
-import com.solvd.spaceCompany.models.SpaceCompany;
 import com.solvd.spaceCompany.models.Station;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,18 +21,18 @@ public class StationDAO implements IDAO<Station> {
                     "VALUES (?, ?)";
 
     private static final String GET_STATION =
-            "SELECT * FROM Stations WHERE id=?";
+            "SELECT * FROM Stations WHERE id = ?";
 
     private static final String GET_ALL_STATIONS =
             "SELECT * FROM Stations";
 
     private static final String UPDATE_STATION =
-            "UPDATE Stations" +
-                    "SET name, space_company_id WHERE id=?";
+            "UPDATE Stations " +
+                    "SET name = ?, space_company_id = ? WHERE id = ?";
 
     private static final String DELETE_STATION =
-            "DELETE Stations" +
-                    "WHERE id=?";
+            "DELETE Stations " +
+                    "WHERE id = ?";
 
     @Override
     public Station get(Long id) {
@@ -92,15 +91,21 @@ public class StationDAO implements IDAO<Station> {
     }
 
     @Override
-    public void insert(Station station, Long spaceCompanyId) {
+    public void insert(Station station) {
         Connection connection = ConnectionPool.getInstance().getConnection();
         try {
             connection.setAutoCommit(false);
             PreparedStatement ps = connection.prepareStatement(INSERT_STATION);
             ps.setString(1, station.getName());
-            ps.setLong(2, spaceCompanyId);
+            ps.setLong(2, station.getSpaceCompany().getId());
 
             ps.executeUpdate();
+
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                station.setId(rs.getLong(1));
+            }
+
             connection.commit();
 
         } catch (SQLException e) {
@@ -115,13 +120,14 @@ public class StationDAO implements IDAO<Station> {
     }
 
     @Override
-    public void update(Station station, Long spaceCompanyId) {
+    public void update(Station station, Long id) {
         Connection connection = ConnectionPool.getInstance().getConnection();
         try {
             connection.setAutoCommit(false);
             PreparedStatement ps = connection.prepareStatement(UPDATE_STATION);
             ps.setString(1, station.getName());
-            ps.setLong(2, spaceCompanyId);
+            ps.setLong(2, station.getSpaceCompany().getId());
+            ps.setLong(3, id);
             ps.executeUpdate();
             connection.commit();
 

@@ -21,17 +21,17 @@ public class SatelliteDAO implements IDAO<Satellite> {
                     "VALUES (?, ?, ?, ?, ?)";
 
     private static final String GET_SATELLITE =
-            "SELECT * FROM Satellites WHERE id=?";
+            "SELECT * FROM Satellites WHERE id = ?";
 
     private static final String GET_ALL_SATELLITES =
             "SELECT * FROM Satellites";
 
     private static final String UPDATE_SATELLITE =
-            "UPDATE Satellites" +
-                    "SET name, weight, cargo_capacity, fuel_capacity, stations_id WHERE id=?";
+            "UPDATE Satellites " +
+                    "SET name = ?, weight = ?, cargo_capacity = ?, fuel_capacity = ?, stations_id = ? WHERE id = ?";
 
     private static final String DELETE_SATELLITE =
-            "DELETE Satellites" +
+            "DELETE Satellites " +
                     "WHERE id=?";
 
     @Override
@@ -94,7 +94,7 @@ public class SatelliteDAO implements IDAO<Satellite> {
     }
 
     @Override
-    public void insert(Satellite satellite, Long stationId) {
+    public void insert(Satellite satellite) {
         Connection connection = ConnectionPool.getInstance().getConnection();
         try {
             connection.setAutoCommit(false);
@@ -103,9 +103,15 @@ public class SatelliteDAO implements IDAO<Satellite> {
             ps.setFloat(2, satellite.getWeight());
             ps.setFloat(3, satellite.getCargoCapacity());
             ps.setFloat(4, satellite.getFuelCapacity());
-            ps.setLong(5, stationId);
+            ps.setLong(5, satellite.getStation().getId());
 
             ps.executeUpdate();
+
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                satellite.setId(rs.getLong(1));
+            }
+
             connection.commit();
 
         } catch (SQLException e) {
@@ -120,7 +126,7 @@ public class SatelliteDAO implements IDAO<Satellite> {
     }
 
     @Override
-    public void update(Satellite satellite, Long stationId) {
+    public void update(Satellite satellite, Long id) {
         Connection connection = ConnectionPool.getInstance().getConnection();
         try {
             connection.setAutoCommit(false);
@@ -129,7 +135,9 @@ public class SatelliteDAO implements IDAO<Satellite> {
             ps.setFloat(2, satellite.getWeight());
             ps.setFloat(3, satellite.getCargoCapacity());
             ps.setFloat(4, satellite.getFuelCapacity());
-            ps.setLong(5, stationId);
+            ps.setLong(5, satellite.getStation().getId());
+            ps.setLong(6, id);
+
             ps.executeUpdate();
             connection.commit();
 

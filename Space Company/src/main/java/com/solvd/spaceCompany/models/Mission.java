@@ -7,24 +7,26 @@ public class Mission {
     private String name;
     private String objective;
     private Integer span;
-    private List<Rocket> rockets;
-    private List<Satellite> satellites;
+    private List<RocketMissionDate> rockets;
+    private List<SatelliteMissionDate> satellites;
 
     public Mission() {
     }
 
-    public Mission(String name, String objective, List<Rocket> rockets, Integer span) {
+    public Mission(String name, String objective, List<RocketMissionDate> rockets,  Integer span) {
         this.name = name;
         this.objective = objective;
         this.span = span;
         this.rockets = rockets;
+        this.satellites = null;
     }
 
-    public Mission(String name, String objective, Integer span, List<Satellite> satellites) {
+    public Mission(String name, String objective, Integer span, List<SatelliteMissionDate> satellites) {
         this.name = name;
         this.objective = objective;
         this.span = span;
         this.satellites = satellites;
+        this.rockets = null;
     }
 
     public long getId() {
@@ -59,19 +61,19 @@ public class Mission {
         this.span = span;
     }
 
-    public List<Rocket> getRockets() {
+    public List<RocketMissionDate> getRockets() {
         return rockets;
     }
 
-    public void setRockets(List<Rocket> rockets) {
+    public void setRockets(List<RocketMissionDate> rockets) {
         this.rockets = rockets;
     }
 
-    public List<Satellite> getSatellites() {
+    public List<SatelliteMissionDate> getSatellites() {
         return satellites;
     }
 
-    public void setSatellites(List<Satellite> satellites) {
+    public void setSatellites(List<SatelliteMissionDate> satellites) {
         this.satellites = satellites;
     }
 }
