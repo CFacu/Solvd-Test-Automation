@@ -6,10 +6,7 @@ import com.solvd.spaceCompany.models.SpaceCompany;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,7 +92,7 @@ public class SpaceCompanyDAO implements IDAO<SpaceCompany> {
         Connection connection = ConnectionPool.getInstance().getConnection();
         try {
             connection.setAutoCommit(false);
-            PreparedStatement ps = connection.prepareStatement(INSERT_SPACE_COMPANY);
+            PreparedStatement ps = connection.prepareStatement(INSERT_SPACE_COMPANY, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, spaceCompany.getName());
 
             ps.executeUpdate();

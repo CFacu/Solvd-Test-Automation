@@ -6,10 +6,7 @@ import com.solvd.spaceCompany.models.CEO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,7 +96,7 @@ public class CEODAO implements IDAO<CEO> {
         Connection connection = ConnectionPool.getInstance().getConnection();
         try {
             connection.setAutoCommit(false);
-            PreparedStatement ps = connection.prepareStatement(INSERT_CEO);
+            PreparedStatement ps = connection.prepareStatement(INSERT_CEO, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, ceo.getFirstName());
             ps.setString(2, ceo.getLastName());
             ps.setInt(3, ceo.getAge());

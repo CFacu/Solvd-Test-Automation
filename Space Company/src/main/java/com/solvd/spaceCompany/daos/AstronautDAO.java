@@ -6,10 +6,7 @@ import com.solvd.spaceCompany.models.Astronaut;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -100,7 +97,7 @@ public class AstronautDAO implements IDAO<Astronaut> {
         Connection connection = ConnectionPool.getInstance().getConnection();
         try {
             connection.setAutoCommit(false);
-            PreparedStatement ps = connection.prepareStatement(INSERT_ASTRONAUT);
+            PreparedStatement ps = connection.prepareStatement(INSERT_ASTRONAUT, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, astronaut.getFirstName());
             ps.setString(2, astronaut.getLastName());
             ps.setInt(3, astronaut.getAge());

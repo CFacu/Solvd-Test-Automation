@@ -6,10 +6,7 @@ import com.solvd.spaceCompany.models.RocketMissionDate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,7 +92,7 @@ public class RocketMissionDateDAO implements IDAO<RocketMissionDate> {
         Connection connection = ConnectionPool.getInstance().getConnection();
         try {
             connection.setAutoCommit(false);
-            PreparedStatement ps = connection.prepareStatement(INSERT_ROCKET_MISSION_DATE);
+            PreparedStatement ps = connection.prepareStatement(INSERT_ROCKET_MISSION_DATE, Statement.RETURN_GENERATED_KEYS);
             ps.setDate(1, mission.getLaunchDate());
             ps.setLong(2, mission.getRocket().getId());
             ps.setLong(3, mission.getMission().getId());
