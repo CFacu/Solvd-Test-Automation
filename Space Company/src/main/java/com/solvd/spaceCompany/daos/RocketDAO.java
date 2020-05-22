@@ -21,17 +21,17 @@ public class RocketDAO implements IDAO<Rocket> {
                     "VALUES (?, ?, ?, ?, ?, ?)";
 
     private static final String GET_ROCKET =
-            "SELECT * FROM Rockets WHERE id=?";
+            "SELECT * FROM Rockets WHERE id = ?";
 
     private static final String GET_ALL_ROCKETS =
             "SELECT * FROM Rockets";
 
     private static final String UPDATE_ROCKET =
-            "UPDATE Rockets" +
-                    "SET name, weight, fuel_capacity, passengers_capacity, cargo_capacity, space_company_id WHERE id=?";
+            "UPDATE Rockets " +
+                    "SET name = ?, weight = ?, fuel_capacity = ?, passengers_capacity = ?, cargo_capacity = ?, space_company_id = ? WHERE id = ?";
 
     private static final String DELETE_ROCKET =
-            "DELETE Rockets" +
+            "DELETE Rockets " +
                     "WHERE id=?";
 
     @Override
@@ -95,7 +95,7 @@ public class RocketDAO implements IDAO<Rocket> {
     }
 
     @Override
-    public void insert(Rocket rocket, Long spaceCompanyId) {
+    public void insert(Rocket rocket) {
         Connection connection = ConnectionPool.getInstance().getConnection();
         try {
             connection.setAutoCommit(false);
@@ -105,9 +105,15 @@ public class RocketDAO implements IDAO<Rocket> {
             ps.setFloat(3, rocket.getFuelCapacity());
             ps.setInt(4, rocket.getPassengerCapacity());
             ps.setFloat(5, rocket.getCargoCapacity());
-            ps.setLong(6, spaceCompanyId);
+            ps.setLong(6, rocket.getSpaceCompany().getId());
 
             ps.executeUpdate();
+
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                rocket.setId(rs.getLong(1));
+            }
+
             connection.commit();
 
         } catch (SQLException e) {
@@ -122,7 +128,7 @@ public class RocketDAO implements IDAO<Rocket> {
     }
 
     @Override
-    public void update(Rocket rocket, Long spaceCompanyId) {
+    public void update(Rocket rocket, Long id) {
         Connection connection = ConnectionPool.getInstance().getConnection();
         try {
             connection.setAutoCommit(false);
@@ -132,7 +138,9 @@ public class RocketDAO implements IDAO<Rocket> {
             ps.setFloat(3, rocket.getFuelCapacity());
             ps.setInt(4, rocket.getPassengerCapacity());
             ps.setFloat(5, rocket.getCargoCapacity());
-            ps.setLong(6, spaceCompanyId);
+            ps.setLong(6, rocket.getSpaceCompany().getId());
+            ps.setLong(7, id);
+
             ps.executeUpdate();
             connection.commit();
 

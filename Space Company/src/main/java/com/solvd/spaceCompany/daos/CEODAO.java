@@ -22,17 +22,17 @@ public class CEODAO implements IDAO<CEO> {
                     "VALUES (?, ?, ?, ?, ?)";
 
     private static final String GET_CEO =
-            "SELECT * FROM CEO WHERE id=?";
+            "SELECT * FROM CEO WHERE id = ?";
 
     private static final String GET_ALL_CEOS =
             "SELECT * FROM CEO";
 
     private static final String UPDATE_CEO =
-            "UPDATE CEO" +
-                    "SET first_name, last_name, age, email, space_company_id WHERE id=?";
+            "UPDATE CEO " +
+                    "SET first_name = ?, last_name = ?, age = ?, email = ?, space_company_id = ? WHERE id=?";
 
     private static final String DELETE_CEO =
-            "DELETE CEO" +
+            "DELETE CEO " +
                     "WHERE id=?";
 
     @Override
@@ -95,7 +95,7 @@ public class CEODAO implements IDAO<CEO> {
     }
 
     @Override
-    public void insert(CEO ceo, Long spaceCompanyId) {
+    public void insert(CEO ceo) {
         Connection connection = ConnectionPool.getInstance().getConnection();
         try {
             connection.setAutoCommit(false);
@@ -104,9 +104,15 @@ public class CEODAO implements IDAO<CEO> {
             ps.setString(2, ceo.getLastName());
             ps.setInt(3, ceo.getAge());
             ps.setString(4, ceo.getEmail());
-            ps.setLong(5, spaceCompanyId);
+            ps.setLong(5, ceo.getSpaceCompany().getId());
 
             ps.executeUpdate();
+
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                ceo.setId(rs.getLong(1));
+            }
+
             connection.commit();
 
         } catch (SQLException e) {
@@ -121,7 +127,7 @@ public class CEODAO implements IDAO<CEO> {
     }
 
     @Override
-    public void update(CEO ceo, Long spaceCompanyId) {
+    public void update(CEO ceo, Long id) {
         Connection connection = ConnectionPool.getInstance().getConnection();
         try {
             connection.setAutoCommit(false);
@@ -130,7 +136,9 @@ public class CEODAO implements IDAO<CEO> {
             ps.setString(2, ceo.getLastName());
             ps.setInt(3, ceo.getAge());
             ps.setString(4, ceo.getEmail());
-            ps.setLong(5, spaceCompanyId);
+            ps.setLong(5, ceo.getSpaceCompany().getId());
+            ps.setLong(6, id);
+
             ps.executeUpdate();
             connection.commit();
 

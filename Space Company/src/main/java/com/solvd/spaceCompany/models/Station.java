@@ -5,16 +5,18 @@ import java.util.List;
 public class Station {
     private long id;
     private String name;
-    private Address address;
+    private List<Satellite> satellites;
     private List<Astronaut> astronauts;
+    private SpaceCompany spaceCompany;
 
     public Station() {
     }
 
-    public Station(String name, Address address, List<Astronaut> astronauts) {
+    public Station(String name, List<Satellite> satellites, List<Astronaut> astronauts, SpaceCompany spaceCompany) {
         this.name = name;
-        this.address = address;
+        this.satellites = satellites;
         this.astronauts = astronauts;
+        this.spaceCompany = spaceCompany;
     }
 
     public long getId() {
@@ -33,19 +35,27 @@ public class Station {
         this.name = name;
     }
 
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
     public List<Astronaut> getAstronauts() {
         return astronauts;
     }
 
     public void setAstronauts(List<Astronaut> astronauts) {
         this.astronauts = astronauts;
+    }
+
+    public SpaceCompany getSpaceCompany() {
+        return spaceCompany;
+    }
+
+    public void setSpaceCompany(SpaceCompany spaceCompany) {
+        this.spaceCompany = spaceCompany;
+    }
+
+    public List<Satellite> getSatellites() {
+        return satellites;
+    }
+
+    public void setSatellites(List<Satellite> satellites) {
+        this.satellites = satellites;
     }
 }

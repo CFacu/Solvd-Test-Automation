@@ -21,17 +21,17 @@ public class EngineerDAO implements IDAO<Engineer> {
                     "VALUES (?, ?, ?, ?, ?)";
 
     private static final String GET_ENGINEER =
-            "SELECT * FROM Engineers WHERE id=?";
+            "SELECT * FROM Engineers WHERE id = ?";
 
     private static final String GET_ALL_ENGINEERS =
             "SELECT * FROM Engineers";
 
     private static final String UPDATE_ENGINEER =
-            "UPDATE Engineers" +
-                    "SET first_name, last_name, age, speciality, space_company_id WHERE id=?";
+            "UPDATE Engineers " +
+                    "SET first_name = ?, last_name = ?, age = ?, speciality = ?, space_company_id = ? WHERE id=?";
 
     private static final String DELETE_ENGINEER =
-            "DELETE Engineers" +
+            "DELETE Engineers " +
                     "WHERE id=?";
 
     @Override
@@ -94,7 +94,7 @@ public class EngineerDAO implements IDAO<Engineer> {
     }
 
     @Override
-    public void insert(Engineer engineer, Long spaceCompanyId) {
+    public void insert(Engineer engineer) {
         Connection connection = ConnectionPool.getInstance().getConnection();
         try {
             connection.setAutoCommit(false);
@@ -103,9 +103,15 @@ public class EngineerDAO implements IDAO<Engineer> {
             ps.setString(2, engineer.getLastName());
             ps.setInt(3, engineer.getAge());
             ps.setString(4, engineer.getSpeciality());
-            ps.setLong(5, spaceCompanyId);
+            ps.setLong(5, engineer.getSpaceCompany().getId());
 
             ps.executeUpdate();
+
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                engineer.setId(rs.getLong(1));
+            }
+
             connection.commit();
 
         } catch (SQLException e) {
@@ -120,7 +126,7 @@ public class EngineerDAO implements IDAO<Engineer> {
     }
 
     @Override
-    public void update(Engineer engineer, Long spaceCompanyId) {
+    public void update(Engineer engineer, Long id) {
         Connection connection = ConnectionPool.getInstance().getConnection();
         try {
             connection.setAutoCommit(false);
@@ -129,7 +135,9 @@ public class EngineerDAO implements IDAO<Engineer> {
             ps.setString(2, engineer.getLastName());
             ps.setInt(3, engineer.getAge());
             ps.setString(4, engineer.getSpeciality());
-            ps.setLong(5, spaceCompanyId);
+            ps.setLong(5, engineer.getSpaceCompany().getId());
+            ps.setLong(6, id);
+
             ps.executeUpdate();
             connection.commit();
 

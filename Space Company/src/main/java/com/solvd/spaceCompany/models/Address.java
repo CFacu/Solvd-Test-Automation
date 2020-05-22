@@ -5,14 +5,16 @@ public class Address {
     private String city;
     private String street;
     private Integer number;
+    private Station station;
 
     public Address() {
     }
 
-    public Address(String city, String street, Integer number) {
+    public Address(String city, String street, Integer number, Station station) {
         this.city = city;
         this.street = street;
         this.number = number;
+        this.station = station;
     }
 
     public long getId() {
@@ -45,5 +47,13 @@ public class Address {
 
     public void setNumber(Integer number) {
         this.number = number;
+    }
+
+    public Station getStation() {
+        return station;
+    }
+
+    public void setStation(Station station) {
+        this.station = station;
     }
 }

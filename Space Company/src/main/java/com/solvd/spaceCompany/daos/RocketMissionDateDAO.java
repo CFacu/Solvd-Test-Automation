@@ -21,17 +21,17 @@ public class RocketMissionDateDAO implements IDAO<RocketMissionDate> {
                     "VALUES (?, ?, ?)";
 
     private static final String GET_ROCKET_MISSION_DATE =
-            "SELECT * FROM Rocket_Mission_Date WHERE id=?";
+            "SELECT * FROM Rocket_Mission_Date WHERE id = ?";
 
     private static final String GET_ALL_ROCKET_MISSIONS_DATE =
             "SELECT * FROM Rocket_Mission_Date";
 
     private static final String UPDATE_ROCKET_MISSION_DATE =
-            "UPDATE Rocket_Mission_Date" +
-                    "SET launch_date, rocket_id, mission_id WHERE id=?";
+            "UPDATE Rocket_Mission_Date " +
+                    "SET launch_date = ?, rocket_id = ?, mission_id = ? WHERE id = ?";
 
     private static final String DELETE_ROCKET_MISSION_DATE =
-            "DELETE Rocket_Mission_Date" +
+            "DELETE Rocket_Mission_Date " +
                     "WHERE id=?";
 
     @Override
@@ -91,25 +91,22 @@ public class RocketMissionDateDAO implements IDAO<RocketMissionDate> {
     }
 
     @Override
-    public void insert(RocketMissionDate rocketMissionDate, Long id) {
-
-    }
-
-    @Override
-    public void update(RocketMissionDate rocketMissionDate, Long id) {
-
-    }
-
-    public void insert(RocketMissionDate mission, Long rocketId, Long missionId) {
+    public void insert(RocketMissionDate mission) {
         Connection connection = ConnectionPool.getInstance().getConnection();
         try {
             connection.setAutoCommit(false);
             PreparedStatement ps = connection.prepareStatement(INSERT_ROCKET_MISSION_DATE);
             ps.setDate(1, mission.getLaunchDate());
-            ps.setLong(2, rocketId);
-            ps.setLong(3, missionId);
+            ps.setLong(2, mission.getRocket().getId());
+            ps.setLong(3, mission.getMission().getId());
 
             ps.executeUpdate();
+
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                mission.setId(rs.getLong(1));
+            }
+
             connection.commit();
 
         } catch (SQLException e) {
@@ -123,14 +120,16 @@ public class RocketMissionDateDAO implements IDAO<RocketMissionDate> {
         }
     }
 
-    public void update(RocketMissionDate mission, Long rocketId, Long missionId) {
+    public void update(RocketMissionDate mission, Long id) {
         Connection connection = ConnectionPool.getInstance().getConnection();
         try {
             connection.setAutoCommit(false);
             PreparedStatement ps = connection.prepareStatement(UPDATE_ROCKET_MISSION_DATE);
             ps.setDate(1, mission.getLaunchDate());
-            ps.setLong(2, rocketId);
-            ps.setLong(3, missionId);
+            ps.setLong(2, mission.getRocket().getId());
+            ps.setLong(3, mission.getMission().getId());
+            ps.setLong(4, id);
+
             ps.executeUpdate();
             connection.commit();
 

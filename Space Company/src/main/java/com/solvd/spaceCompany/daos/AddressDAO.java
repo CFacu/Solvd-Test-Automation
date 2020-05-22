@@ -6,10 +6,7 @@ import com.solvd.spaceCompany.models.Address;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,11 +25,11 @@ public class AddressDAO implements IDAO<Address> {
             "SELECT * FROM Addresses";
 
     private static final String UPDATE_ADDRESS =
-            "UPDATE Addresses" +
-                    "SET city, street, number, stations_id WHERE id=?";
+            "UPDATE Addresses " +
+                    "SET city = ?, street= ?, number= ?, stations_id = ? WHERE id=?";
 
     private static final String DELETE_ADDRESS =
-            "DELETE Addresses" +
+            "DELETE Addresses " +
                     "WHERE id=?";
 
     @Override
@@ -93,16 +90,22 @@ public class AddressDAO implements IDAO<Address> {
         return null;
     }
 
-    public void insert(Address address, Long stationId){
+    @Override
+    public void insert(Address address){
         Connection connection = ConnectionPool.getInstance().getConnection();
         try {
             connection.setAutoCommit(false);
-            PreparedStatement ps = connection.prepareStatement(INSERT_ADDRESS);
+            PreparedStatement ps = connection.prepareStatement(INSERT_ADDRESS, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, address.getCity());
             ps.setString(2, address.getStreet());
             ps.setInt(3, address.getNumber());
-            ps.setLong(4, stationId);
+            ps.setLong(4, address.getStation().getId());
+
             ps.executeUpdate();
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                address.setId(rs.getLong(1));
+            }
             connection.commit();
 
         } catch (SQLException e) {
@@ -116,7 +119,8 @@ public class AddressDAO implements IDAO<Address> {
         }
     }
 
-    public void update(Address address, Long stationId) {
+    @Override
+    public void update(Address address, Long id) {
         Connection connection = ConnectionPool.getInstance().getConnection();
         try {
             connection.setAutoCommit(false);
@@ -124,7 +128,8 @@ public class AddressDAO implements IDAO<Address> {
             ps.setString(1, address.getCity());
             ps.setString(2, address.getStreet());
             ps.setInt(3, address.getNumber());
-            ps.setLong(4, stationId);
+            ps.setLong(4, address.getStation().getId());
+            ps.setLong(5, id);
             ps.executeUpdate();
             connection.commit();
 
