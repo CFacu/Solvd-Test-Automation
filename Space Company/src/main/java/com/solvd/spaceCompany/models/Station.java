@@ -1,11 +1,20 @@
 package com.solvd.spaceCompany.models;
 
+import javax.xml.bind.annotation.*;
 import java.util.List;
 
+@XmlRootElement(name = "station")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Station {
+    @XmlAttribute
     private long id;
+    @XmlElement
     private String name;
+    @XmlElementWrapper(name = "satellites")
+    @XmlElement(name = "satellite", type = Satellite.class)
     private List<Satellite> satellites;
+    @XmlElementWrapper(name = "astronauts")
+    @XmlElement(name = "astronaut", type = Astronaut.class)
     private List<Astronaut> astronauts;
     private SpaceCompany spaceCompany;
 
@@ -57,5 +66,16 @@ public class Station {
 
     public void setSatellites(List<Satellite> satellites) {
         this.satellites = satellites;
+    }
+
+    @Override
+    public String toString() {
+        return "Station{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", satellites=" + satellites +
+                ", astronauts=" + astronauts +
+                ", spaceCompany=" + spaceCompany +
+                '}';
     }
 }

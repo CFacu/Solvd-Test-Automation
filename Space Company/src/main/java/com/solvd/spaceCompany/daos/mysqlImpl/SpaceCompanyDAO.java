@@ -1,7 +1,7 @@
-package com.solvd.spaceCompany.daos;
+package com.solvd.spaceCompany.daos.mysqlImpl;
 
 import com.solvd.spaceCompany.ConnectionPool;
-import com.solvd.spaceCompany.daos.interfaces.IDAO;
+import com.solvd.spaceCompany.daos.IDAO;
 import com.solvd.spaceCompany.models.SpaceCompany;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,21 +33,36 @@ public class SpaceCompanyDAO implements IDAO<SpaceCompany> {
 
     @Override
     public SpaceCompany get(Long id) {
-        Connection connection = ConnectionPool.getInstance().getConnection();
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet resultSet = null;
         try {
-            PreparedStatement ps = connection.prepareStatement(GET_SPACE_COMPANY);
+            connection = pool.getConnection();
+            ps = connection.prepareStatement(GET_SPACE_COMPANY);
             ps.setLong(1, id);
-            ResultSet resultSet = ps.executeQuery();
-            while (resultSet.next()) {
-                return extractFromResultSet(resultSet);
-            }
+            resultSet = ps.executeQuery();
+            resultSet.next();
+            return extractFromResultSet(resultSet);
         } catch (SQLException e) {
             LOGGER.error(e);
         } finally {
             try {
-                connection.close();
+                if (ps != null) {
+                    ps.close();
+                }
             } catch (SQLException e) {
                 LOGGER.error(e);
+            } finally {
+                try {
+                    if (resultSet != null) {
+                        resultSet.close();
+                    }
+                } catch (SQLException e) {
+                    LOGGER.error(e);
+                } finally {
+                    pool.releaseConnection(connection);
+                }
             }
         }
         return null;
@@ -64,10 +79,14 @@ public class SpaceCompanyDAO implements IDAO<SpaceCompany> {
 
     @Override
     public List<SpaceCompany> getAll() {
-        Connection connection = ConnectionPool.getInstance().getConnection();
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet resultSet = null;
         try {
-            PreparedStatement ps = connection.prepareStatement(GET_ALL_SPACE_COMPANIES);
-            ResultSet resultSet = ps.executeQuery();
+            connection = pool.getConnection();
+            ps = connection.prepareStatement(GET_ALL_SPACE_COMPANIES);
+            resultSet = ps.executeQuery();
             List<SpaceCompany> spaceCompanies = new ArrayList<>();
 
             while (resultSet.next()) {
@@ -79,9 +98,21 @@ public class SpaceCompanyDAO implements IDAO<SpaceCompany> {
             LOGGER.error(e);
         } finally {
             try {
-                connection.close();
+                if (ps != null) {
+                    ps.close();
+                }
             } catch (SQLException e) {
                 LOGGER.error(e);
+            } finally {
+                try {
+                    if (resultSet != null) {
+                        resultSet.close();
+                    }
+                } catch (SQLException e) {
+                    LOGGER.error(e);
+                } finally {
+                    pool.releaseConnection(connection);
+                }
             }
         }
         return null;
@@ -89,17 +120,21 @@ public class SpaceCompanyDAO implements IDAO<SpaceCompany> {
 
     @Override
     public void insert(SpaceCompany spaceCompany) {
-        Connection connection = ConnectionPool.getInstance().getConnection();
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet resultSet = null;
         try {
+            connection = pool.getConnection();
             connection.setAutoCommit(false);
-            PreparedStatement ps = connection.prepareStatement(INSERT_SPACE_COMPANY, Statement.RETURN_GENERATED_KEYS);
+            ps = connection.prepareStatement(INSERT_SPACE_COMPANY, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, spaceCompany.getName());
 
             ps.executeUpdate();
 
-            ResultSet rs = ps.getGeneratedKeys();
-            if (rs.next()) {
-                spaceCompany.setId(rs.getLong(1));
+            resultSet = ps.getGeneratedKeys();
+            if (resultSet.next()) {
+                spaceCompany.setId(resultSet.getLong(1));
             }
 
             connection.commit();
@@ -108,19 +143,34 @@ public class SpaceCompanyDAO implements IDAO<SpaceCompany> {
             LOGGER.error(e);
         } finally {
             try {
-                connection.close();
+                if (ps != null) {
+                    ps.close();
+                }
             } catch (SQLException e) {
                 LOGGER.error(e);
+            } finally {
+                try {
+                    if (resultSet != null) {
+                        resultSet.close();
+                    }
+                } catch (SQLException e) {
+                    LOGGER.error(e);
+                } finally {
+                    pool.releaseConnection(connection);
+                }
             }
         }
     }
 
     @Override
     public void update(SpaceCompany spaceCompany, Long id) {
-        Connection connection = ConnectionPool.getInstance().getConnection();
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = null;
+        PreparedStatement ps = null;
         try {
+            connection = pool.getConnection();
             connection.setAutoCommit(false);
-            PreparedStatement ps = connection.prepareStatement(UPDATE_SPACE_COMPANY);
+            ps = connection.prepareStatement(UPDATE_SPACE_COMPANY);
             ps.setString(1, spaceCompany.getName());
             ps.setLong(2, id);
 
@@ -131,27 +181,38 @@ public class SpaceCompanyDAO implements IDAO<SpaceCompany> {
             LOGGER.error(e);
         } finally {
             try {
-                connection.close();
+                if (ps != null) {
+                    ps.close();
+                }
             } catch (SQLException e) {
                 LOGGER.error(e);
+            } finally {
+                pool.releaseConnection(connection);
             }
         }
     }
 
     @Override
     public void delete(Long id) {
-        Connection connection = ConnectionPool.getInstance().getConnection();
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = null;
+        PreparedStatement ps = null;
         try {
-            PreparedStatement ps = connection.prepareStatement(DELETE_SPACE_COMPANY);
+            connection = pool.getConnection();
+            ps = connection.prepareStatement(DELETE_SPACE_COMPANY);
             ps.setLong(1, id);
             ps.executeUpdate();
         } catch (SQLException e) {
             LOGGER.error(e);
         } finally {
             try {
-                connection.close();
+                if (ps != null) {
+                    ps.close();
+                }
             } catch (SQLException e) {
                 LOGGER.error(e);
+            } finally {
+                pool.releaseConnection(connection);
             }
         }
     }

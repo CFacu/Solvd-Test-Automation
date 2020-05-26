@@ -1,6 +1,14 @@
 package com.solvd.spaceCompany.models;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name = "CEO")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class CEO extends Person{
+    @XmlElement
     private String email;
     private SpaceCompany spaceCompany;
 
@@ -8,9 +16,7 @@ public class CEO extends Person{
     }
 
     public CEO(String firstName, String lastName, Integer age,String email, SpaceCompany spaceCompany) {
-        this.setFirstName(firstName);
-        this.setLastName(lastName);
-        this.setAge(age);
+        super(firstName, lastName, age);
         this.email = email;
         this.spaceCompany = spaceCompany;
     }

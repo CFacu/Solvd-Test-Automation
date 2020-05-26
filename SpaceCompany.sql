@@ -8,12 +8,12 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Schema space_company
 -- -----------------------------------------------------
 DROP SCHEMA IF EXISTS `space_company` ;
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Schema space_company
 -- -----------------------------------------------------
 CREATE SCHEMA IF NOT EXISTS `space_company` DEFAULT CHARACTER SET utf8 ;
 USE `space_company` ;
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `space_company`.`Engineers` (
   INDEX `fk_Engineers_Space_Company1_idx` (`space_company_id` ASC) VISIBLE,
   CONSTRAINT `fk_Engineers_Space_Company1`
     FOREIGN KEY (`space_company_id`)
-    REFERENCES `mydb`.`Space_Company` (`id`)
+    REFERENCES `space_company`.`Space_Company` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS `space_company`.`Stations` (
   INDEX `fk_Stations_Space_Company1_idx` (`space_company_id` ASC) VISIBLE,
   CONSTRAINT `fk_Stations_Space_Company1`
     FOREIGN KEY (`space_company_id`)
-    REFERENCES `mydb`.`Space_Company` (`id`)
+    REFERENCES `space_company`.`Space_Company` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -91,7 +91,7 @@ CREATE TABLE IF NOT EXISTS `space_company`.`Astronauts` (
   INDEX `fk_Astronauts_Stations1_idx` (`stations_id` ASC) VISIBLE,
   CONSTRAINT `fk_Astronauts_Stations1`
     FOREIGN KEY (`stations_id`)
-    REFERENCES `mydb`.`Stations` (`id`)
+    REFERENCES `space_company`.`Stations` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -113,7 +113,7 @@ CREATE TABLE IF NOT EXISTS `space_company`.`Addresses` (
   INDEX `fk_Addresses_Stations1_idx` (`stations_id` ASC) VISIBLE,
   CONSTRAINT `fk_Addresses_Stations1`
     FOREIGN KEY (`stations_id`)
-    REFERENCES `mydb`.`Stations` (`id`)
+    REFERENCES `space_company`.`Stations` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -137,7 +137,7 @@ CREATE TABLE IF NOT EXISTS `space_company`.`Rockets` (
   INDEX `fk_Rockets_Space_Company1_idx` (`space_company_id` ASC) VISIBLE,
   CONSTRAINT `fk_Rockets_Space_Company1`
     FOREIGN KEY (`space_company_id`)
-    REFERENCES `mydb`.`Space_Company` (`id`)
+    REFERENCES `space_company`.`Space_Company` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -175,7 +175,7 @@ CREATE TABLE IF NOT EXISTS `space_company`.`CEO` (
   INDEX `fk_CEO_Space_Company1_idx` (`space_company_id` ASC) VISIBLE,
   CONSTRAINT `fk_CEO_Space_Company1`
     FOREIGN KEY (`space_company_id`)
-    REFERENCES `mydb`.`Space_Company` (`id`)
+    REFERENCES `space_company`.`Space_Company` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -197,12 +197,12 @@ CREATE TABLE IF NOT EXISTS `space_company`.`Rocket_Mission_Date` (
   INDEX `fk_Rocket_Mission_Date_Missions1_idx` (`missions_id` ASC) VISIBLE,
   CONSTRAINT `fk_Rocket_Mission_Date_Rockets1`
     FOREIGN KEY (`rockets_id`)
-    REFERENCES `mydb`.`Rockets` (`id`)
+    REFERENCES `space_company`.`Rockets` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Rocket_Mission_Date_Missions1`
     FOREIGN KEY (`missions_id`)
-    REFERENCES `mydb`.`Missions` (`id`)
+    REFERENCES `space_company`.`Missions` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -225,7 +225,7 @@ CREATE TABLE IF NOT EXISTS `space_company`.`Satellites` (
   INDEX `fk_Satellites_Stations1_idx` (`stations_id` ASC) VISIBLE,
   CONSTRAINT `fk_Satellites_Stations1`
     FOREIGN KEY (`stations_id`)
-    REFERENCES `mydb`.`Stations` (`id`)
+    REFERENCES `space_company`.`Stations` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -247,12 +247,12 @@ CREATE TABLE IF NOT EXISTS `space_company`.`Satellite_Mission_Date` (
   INDEX `fk_Satellite_Mission_Date_Missions1_idx` (`missions_id` ASC) VISIBLE,
   CONSTRAINT `fk_Satellite_Mission_Date_Satellites1`
     FOREIGN KEY (`satellites_id`)
-    REFERENCES `mydb`.`Satellites` (`id`)
+    REFERENCES `space_company`.`Satellites` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Satellite_Mission_Date_Missions1`
     FOREIGN KEY (`missions_id`)
-    REFERENCES `mydb`.`Missions` (`id`)
+    REFERENCES `space_company`.`Missions` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

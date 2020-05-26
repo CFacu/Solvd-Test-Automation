@@ -1,20 +1,23 @@
 package com.solvd.spaceCompany.models;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name = "rocket")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Rocket extends Spacecraft {
+    @XmlElement
     private Integer passengerCapacity;
-    private RocketMissionDate rocketMissionDate;
     private SpaceCompany spaceCompany;
 
     public Rocket() {
     }
 
-    public Rocket(String name, Float weight, Float cargoCapacity, Float fuelCapacity, Integer passengerCapacity, RocketMissionDate rocketMissionDate, SpaceCompany spaceCompany) {
+    public Rocket(String name, Float weight, Float cargoCapacity, Float fuelCapacity, Integer passengerCapacity, SpaceCompany spaceCompany) {
+        super(name, weight, cargoCapacity, fuelCapacity);
         this.passengerCapacity = passengerCapacity;
-        this.rocketMissionDate = rocketMissionDate;
-        this.setName(name);
-        this.setCargoCapacity(cargoCapacity);
-        this.setFuelCapacity(fuelCapacity);
-        this.setWeight(weight);
         this.spaceCompany = spaceCompany;
     }
 
@@ -26,19 +29,23 @@ public class Rocket extends Spacecraft {
         this.passengerCapacity = passengerCapacity;
     }
 
-    public RocketMissionDate getRocketMissionDate() {
-        return rocketMissionDate;
-    }
-
-    public void setRocketMissionDate(RocketMissionDate rocketMissionDate) {
-        this.rocketMissionDate = rocketMissionDate;
-    }
-
     public SpaceCompany getSpaceCompany() {
         return spaceCompany;
     }
 
     public void setSpaceCompany(SpaceCompany spaceCompany) {
         this.spaceCompany = spaceCompany;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "id=" + this.getId() +
+                ", name='" + this.getName() + '\'' +
+                ", weight=" + this.getWeight() +
+                ", cargoCapacity=" + this.getCargoCapacity() +
+                ", fuelCapacity=" + this.getFuelCapacity() +
+                ", passengerCapacity=" + passengerCapacity +
+                '}';
     }
 }

@@ -1,7 +1,7 @@
-package com.solvd.spaceCompany.daos;
+package com.solvd.spaceCompany.daos.mysqlImpl;
 
 import com.solvd.spaceCompany.ConnectionPool;
-import com.solvd.spaceCompany.daos.interfaces.IDAO;
+import com.solvd.spaceCompany.daos.IDAO;
 import com.solvd.spaceCompany.models.Mission;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,21 +33,36 @@ public class MissionDAO implements IDAO<Mission> {
 
     @Override
     public Mission get(Long id) {
-        Connection connection = ConnectionPool.getInstance().getConnection();
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet resultSet = null;
         try {
-            PreparedStatement ps = connection.prepareStatement(GET_MISSION);
+            connection = pool.getConnection();
+            ps = connection.prepareStatement(GET_MISSION);
             ps.setLong(1, id);
-            ResultSet resultSet = ps.executeQuery();
-            while (resultSet.next()) {
-                return extractFromResultSet(resultSet);
-            }
+            resultSet = ps.executeQuery();
+            resultSet.next();
+            return extractFromResultSet(resultSet);
         } catch (SQLException e) {
             LOGGER.error(e);
         } finally {
             try {
-                connection.close();
+                if (ps != null) {
+                    ps.close();
+                }
             } catch (SQLException e) {
                 LOGGER.error(e);
+            } finally {
+                try {
+                    if (resultSet != null) {
+                        resultSet.close();
+                    }
+                } catch (SQLException e) {
+                    LOGGER.error(e);
+                } finally {
+                    pool.releaseConnection(connection);
+                }
             }
         }
         return null;
@@ -66,10 +81,14 @@ public class MissionDAO implements IDAO<Mission> {
 
     @Override
     public List<Mission> getAll() {
-        Connection connection = ConnectionPool.getInstance().getConnection();
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet resultSet = null;
         try {
-            PreparedStatement ps = connection.prepareStatement(GET_ALL_MISSIONS);
-            ResultSet resultSet = ps.executeQuery();
+            connection = pool.getConnection();
+            ps = connection.prepareStatement(GET_ALL_MISSIONS);
+            resultSet = ps.executeQuery();
             List<Mission> missions = new ArrayList<>();
 
             while (resultSet.next()) {
@@ -81,9 +100,21 @@ public class MissionDAO implements IDAO<Mission> {
             LOGGER.error(e);
         } finally {
             try {
-                connection.close();
+                if (ps != null) {
+                    ps.close();
+                }
             } catch (SQLException e) {
                 LOGGER.error(e);
+            } finally {
+                try {
+                    if (resultSet != null) {
+                        resultSet.close();
+                    }
+                } catch (SQLException e) {
+                    LOGGER.error(e);
+                } finally {
+                    pool.releaseConnection(connection);
+                }
             }
         }
         return null;
@@ -91,19 +122,23 @@ public class MissionDAO implements IDAO<Mission> {
 
     @Override
     public void insert(Mission mission) {
-        Connection connection = ConnectionPool.getInstance().getConnection();
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet resultSet = null;
         try {
+            connection = pool.getConnection();
             connection.setAutoCommit(false);
-            PreparedStatement ps = connection.prepareStatement(INSERT_MISSION, Statement.RETURN_GENERATED_KEYS);
+            ps = connection.prepareStatement(INSERT_MISSION, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, mission.getName());
             ps.setString(2, mission.getObjective());
             ps.setInt(3, mission.getSpan());
 
             ps.executeUpdate();
 
-            ResultSet rs = ps.getGeneratedKeys();
-            if (rs.next()) {
-                mission.setId(rs.getLong(1));
+            resultSet = ps.getGeneratedKeys();
+            if (resultSet.next()) {
+                mission.setId(resultSet.getLong(1));
             }
 
             connection.commit();
@@ -112,19 +147,34 @@ public class MissionDAO implements IDAO<Mission> {
             LOGGER.error(e);
         } finally {
             try {
-                connection.close();
+                if (ps != null) {
+                    ps.close();
+                }
             } catch (SQLException e) {
                 LOGGER.error(e);
+            } finally {
+                try {
+                    if (resultSet != null) {
+                        resultSet.close();
+                    }
+                } catch (SQLException e) {
+                    LOGGER.error(e);
+                } finally {
+                    pool.releaseConnection(connection);
+                }
             }
         }
     }
 
     @Override
     public void update(Mission mission, Long id) {
-        Connection connection = ConnectionPool.getInstance().getConnection();
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = null;
+        PreparedStatement ps = null;
         try {
+            connection = pool.getConnection();
             connection.setAutoCommit(false);
-            PreparedStatement ps = connection.prepareStatement(UPDATE_MISSION);
+            ps = connection.prepareStatement(UPDATE_MISSION);
             ps.setString(1, mission.getName());
             ps.setString(2, mission.getObjective());
             ps.setInt(3, mission.getSpan());
@@ -137,27 +187,38 @@ public class MissionDAO implements IDAO<Mission> {
             LOGGER.error(e);
         } finally {
             try {
-                connection.close();
+                if (ps != null) {
+                    ps.close();
+                }
             } catch (SQLException e) {
                 LOGGER.error(e);
+            } finally {
+                pool.releaseConnection(connection);
             }
         }
     }
 
     @Override
     public void delete(Long id) {
-        Connection connection = ConnectionPool.getInstance().getConnection();
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = null;
+        PreparedStatement ps = null;
         try {
-            PreparedStatement ps = connection.prepareStatement(DELETE_MISSION);
+            connection = pool.getConnection();
+            ps = connection.prepareStatement(DELETE_MISSION);
             ps.setLong(1, id);
             ps.executeUpdate();
         } catch (SQLException e) {
             LOGGER.error(e);
         } finally {
             try {
-                connection.close();
+                if (ps != null) {
+                    ps.close();
+                }
             } catch (SQLException e) {
                 LOGGER.error(e);
+            } finally {
+                pool.releaseConnection(connection);
             }
         }
     }

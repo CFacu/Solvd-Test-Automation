@@ -1,12 +1,23 @@
 package com.solvd.spaceCompany.models;
 
+import javax.xml.bind.annotation.*;
 import java.util.List;
 
+@XmlRootElement(name = "SpaceCompany")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class SpaceCompany {
+    @XmlAttribute(name = "id")
     private Long id;
+    @XmlElement
     private String name;
+    @XmlElementWrapper(name = "stations")
+    @XmlElement(name = "station", type = Station.class)
     private List<Station> stations;
+    @XmlElementWrapper(name = "engineers")
+    @XmlElement(name = "engineer", type = Engineer.class)
     private List<Engineer> engineers;
+    @XmlElementWrapper(name = "rockets")
+    @XmlElement(name = "rocket", type = Rocket.class)
     private List<Rocket> rockets;
 
     public SpaceCompany() {
@@ -57,5 +68,10 @@ public class SpaceCompany {
 
     public void setRockets(List<Rocket> rockets) {
         this.rockets = rockets;
+    }
+
+    @Override
+    public String toString() {
+        return this.name;
     }
 }

@@ -1,7 +1,7 @@
-package com.solvd.spaceCompany.daos;
+package com.solvd.spaceCompany.daos.mysqlImpl;
 
 import com.solvd.spaceCompany.ConnectionPool;
-import com.solvd.spaceCompany.daos.interfaces.IDAO;
+import com.solvd.spaceCompany.daos.IDAO;
 import com.solvd.spaceCompany.models.RocketMissionDate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,21 +33,36 @@ public class RocketMissionDateDAO implements IDAO<RocketMissionDate> {
 
     @Override
     public RocketMissionDate get(Long id) {
-        Connection connection = ConnectionPool.getInstance().getConnection();
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet resultSet = null;
         try {
-            PreparedStatement ps = connection.prepareStatement(GET_ROCKET_MISSION_DATE);
+            connection = pool.getConnection();
+            ps = connection.prepareStatement(GET_ROCKET_MISSION_DATE);
             ps.setLong(1, id);
-            ResultSet resultSet = ps.executeQuery();
-            while (resultSet.next()) {
-                return extractFromResultSet(resultSet);
-            }
+            resultSet = ps.executeQuery();
+            resultSet.next();
+            return extractFromResultSet(resultSet);
         } catch (SQLException e) {
             LOGGER.error(e);
         } finally {
             try {
-                connection.close();
+                if (ps != null) {
+                    ps.close();
+                }
             } catch (SQLException e) {
                 LOGGER.error(e);
+            } finally {
+                try {
+                    if (resultSet != null) {
+                        resultSet.close();
+                    }
+                } catch (SQLException e) {
+                    LOGGER.error(e);
+                } finally {
+                    pool.releaseConnection(connection);
+                }
             }
         }
         return null;
@@ -64,10 +79,14 @@ public class RocketMissionDateDAO implements IDAO<RocketMissionDate> {
 
     @Override
     public List<RocketMissionDate> getAll() {
-        Connection connection = ConnectionPool.getInstance().getConnection();
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet resultSet = null;
         try {
-            PreparedStatement ps = connection.prepareStatement(GET_ALL_ROCKET_MISSIONS_DATE);
-            ResultSet resultSet = ps.executeQuery();
+            connection = pool.getConnection();
+            ps = connection.prepareStatement(GET_ALL_ROCKET_MISSIONS_DATE);
+            resultSet = ps.executeQuery();
             List<RocketMissionDate> missions = new ArrayList<>();
 
             while (resultSet.next()) {
@@ -79,9 +98,21 @@ public class RocketMissionDateDAO implements IDAO<RocketMissionDate> {
             LOGGER.error(e);
         } finally {
             try {
-                connection.close();
+                if (ps != null) {
+                    ps.close();
+                }
             } catch (SQLException e) {
                 LOGGER.error(e);
+            } finally {
+                try {
+                    if (resultSet != null) {
+                        resultSet.close();
+                    }
+                } catch (SQLException e) {
+                    LOGGER.error(e);
+                } finally {
+                    pool.releaseConnection(connection);
+                }
             }
         }
         return null;
@@ -89,19 +120,23 @@ public class RocketMissionDateDAO implements IDAO<RocketMissionDate> {
 
     @Override
     public void insert(RocketMissionDate mission) {
-        Connection connection = ConnectionPool.getInstance().getConnection();
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet resultSet = null;
         try {
+            connection = pool.getConnection();
             connection.setAutoCommit(false);
-            PreparedStatement ps = connection.prepareStatement(INSERT_ROCKET_MISSION_DATE, Statement.RETURN_GENERATED_KEYS);
+            ps = connection.prepareStatement(INSERT_ROCKET_MISSION_DATE, Statement.RETURN_GENERATED_KEYS);
             ps.setDate(1, mission.getLaunchDate());
             ps.setLong(2, mission.getRocket().getId());
             ps.setLong(3, mission.getMission().getId());
 
             ps.executeUpdate();
 
-            ResultSet rs = ps.getGeneratedKeys();
-            if (rs.next()) {
-                mission.setId(rs.getLong(1));
+            resultSet = ps.getGeneratedKeys();
+            if (resultSet.next()) {
+                mission.setId(resultSet.getLong(1));
             }
 
             connection.commit();
@@ -110,18 +145,33 @@ public class RocketMissionDateDAO implements IDAO<RocketMissionDate> {
             LOGGER.error(e);
         } finally {
             try {
-                connection.close();
+                if (ps != null) {
+                    ps.close();
+                }
             } catch (SQLException e) {
                 LOGGER.error(e);
+            } finally {
+                try {
+                    if (resultSet != null) {
+                        resultSet.close();
+                    }
+                } catch (SQLException e) {
+                    LOGGER.error(e);
+                } finally {
+                    pool.releaseConnection(connection);
+                }
             }
         }
     }
 
     public void update(RocketMissionDate mission, Long id) {
-        Connection connection = ConnectionPool.getInstance().getConnection();
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = null;
+        PreparedStatement ps = null;
         try {
+            connection = pool.getConnection();
             connection.setAutoCommit(false);
-            PreparedStatement ps = connection.prepareStatement(UPDATE_ROCKET_MISSION_DATE);
+            ps = connection.prepareStatement(UPDATE_ROCKET_MISSION_DATE);
             ps.setDate(1, mission.getLaunchDate());
             ps.setLong(2, mission.getRocket().getId());
             ps.setLong(3, mission.getMission().getId());
@@ -134,27 +184,38 @@ public class RocketMissionDateDAO implements IDAO<RocketMissionDate> {
             LOGGER.error(e);
         } finally {
             try {
-                connection.close();
+                if (ps != null) {
+                    ps.close();
+                }
             } catch (SQLException e) {
                 LOGGER.error(e);
+            } finally {
+                pool.releaseConnection(connection);
             }
         }
     }
 
     @Override
     public void delete(Long id) {
-        Connection connection = ConnectionPool.getInstance().getConnection();
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = null;
+        PreparedStatement ps = null;
         try {
-            PreparedStatement ps = connection.prepareStatement(DELETE_ROCKET_MISSION_DATE);
+            connection = pool.getConnection();
+            ps = connection.prepareStatement(DELETE_ROCKET_MISSION_DATE);
             ps.setLong(1, id);
             ps.executeUpdate();
         } catch (SQLException e) {
             LOGGER.error(e);
         } finally {
             try {
-                connection.close();
+                if (ps != null) {
+                    ps.close();
+                }
             } catch (SQLException e) {
                 LOGGER.error(e);
+            } finally {
+                pool.releaseConnection(connection);
             }
         }
     }
