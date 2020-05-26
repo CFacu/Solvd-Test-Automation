@@ -1,73 +1,62 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<spaceCompanies>
-    <spaceCompany id = "111">
-        <name>NASA</name>
-
-        <stations>
-            <station stationId = "789">
-                <name>Kennedy Space Center</name>
-                <satellites>
-                    <satellite satelliteId = "111">
-                        <name>Satellite123</name>
-                        <weight>5147</weight>
-                        <cargoCapacity>500</cargoCapacity>
-                        <fuelCapacity>1200</fuelCapacity>
-                        <launchDate>05/02/1998</launchDate>
-                    </satellite>
-                </satellites>
-
-                <rockets>
-                    <rocket rocketId = "222">
-                        <name>Rocket321</name>
-                        <passengerCapacity>5</passengerCapacity>
-                        <weight>598714</weight>
-                        <cargoCapacity>3000</cargoCapacity>
-                        <fuelCapacity>2500</fuelCapacity>
-                        <launchDate>11/12/1965</launchDate>
-                    </rocket>
-                </rockets>
-
-            </station>
-            <station stationId = "654">
-                <name>Marshal Space Center</name>
-                <satellites>
-                    <satellite satelliteId = "999">
-                        <name>SatelliteX21</name>
-                        <weight>5147</weight>
-                        <cargoCapacity>500</cargoCapacity>
-                        <fuelCapacity>1200</fuelCapacity>
-                        <launchDate>05/02/1998</launchDate>
-                    </satellite>
-                </satellites>
-
-                <rockets>
-                    <rocket rocketId = "555">
-                        <name>RocketP32</name>
-                        <passengerCapacity>5</passengerCapacity>
-                        <weight>598714</weight>
-                        <cargoCapacity>3000</cargoCapacity>
-                        <fuelCapacity>2500</fuelCapacity>
-                        <launchDate>11/12/1965</launchDate>
-                    </rocket>
-                </rockets>
-
-            </station>
-        </stations>
-
-        <engineers>
-            <engineer engineerId = "333">
-                <firstName>Robert</firstName>
-                <lastName>Johnson</lastName>
-                <age>39</age>
-                <speciality>Flight Engineer</speciality>
-            </engineer>
-            <engineer engineerId = "444">
-                <firstName>John</firstName>
-                <lastName>Smith</lastName>
-                <age>46</age>
-                <speciality>Hardware Engineer</speciality>
-            </engineer>
-        </engineers>
-
-    </spaceCompany>
-</spaceCompanies>
+<SpaceCompany id = "111">
+    <name>NASA</name>
+    <stations>
+        <station id = "789">
+            <name>Kennedy Space Center</name>
+            <satellites>
+                <satellite id = "111">
+                    <name>Satellite123</name>
+                    <weight>5147</weight>
+                    <cargoCapacity>500</cargoCapacity>
+                    <fuelCapacity>1200</fuelCapacity>
+                    <launchDate>05/02/1998</launchDate>
+                </satellite>
+            </satellites>
+        </station>
+        <station id = "654">
+            <name>Marshal Space Center</name>
+            <satellites>
+                <satellite id = "999">
+                    <name>SatelliteX21</name>
+                    <weight>5147</weight>
+                    <cargoCapacity>500</cargoCapacity>
+                    <fuelCapacity>1200</fuelCapacity>
+                    <launchDate>05/02/1998</launchDate>
+                </satellite>
+            </satellites>
+        </station>
+    </stations>
+    <rockets>
+        <rocket id = "222">
+            <name>Rocket321</name>
+            <passengerCapacity>5</passengerCapacity>
+            <weight>598714</weight>
+            <cargoCapacity>3000</cargoCapacity>
+            <fuelCapacity>2500</fuelCapacity>
+            <launchDate>11/12/1965</launchDate>
+        </rocket>
+        <rocket id = "555">
+            <name>RocketP32</name>
+            <passengerCapacity>7</passengerCapacity>
+            <weight>598714</weight>
+            <cargoCapacity>3000</cargoCapacity>
+            <fuelCapacity>2500</fuelCapacity>
+            <launchDate>11/12/1965</launchDate>
+        </rocket>
+    </rockets>
+    <engineers>
+        <engineer id = "333">
+            <firstName>Robert</firstName>
+            <lastName>Johnson</lastName>
+            <age>39</age>
+            <speciality>Flight Engineer</speciality>
+        </engineer>
+        <engineer id = "444">
+            <firstName>John</firstName>
+            <lastName>Smith</lastName>
+            <age>46</age>
+            <speciality>Hardware Engineer</speciality>
+        </engineer>
+    </engineers>
+</SpaceCompany>

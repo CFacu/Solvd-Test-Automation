@@ -1,7 +1,7 @@
-package com.solvd.spaceCompany.daos;
+package com.solvd.spaceCompany.daos.mysqlImpl;
 
 import com.solvd.spaceCompany.ConnectionPool;
-import com.solvd.spaceCompany.daos.interfaces.IDAO;
+import com.solvd.spaceCompany.daos.IDAO;
 import com.solvd.spaceCompany.models.CEO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,21 +34,36 @@ public class CEODAO implements IDAO<CEO> {
 
     @Override
     public CEO get(Long id) {
-        Connection connection = ConnectionPool.getInstance().getConnection();
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet resultSet = null;
         try {
-            PreparedStatement ps = connection.prepareStatement(GET_CEO);
+            connection = pool.getConnection();
+            ps = connection.prepareStatement(GET_CEO);
             ps.setLong(1, id);
-            ResultSet resultSet = ps.executeQuery();
-            while (resultSet.next()) {
-                return extractFromResultSet(resultSet);
-            }
+            resultSet = ps.executeQuery();
+            resultSet.next();
+            return extractFromResultSet(resultSet);
         } catch (SQLException e) {
             LOGGER.error(e);
         } finally {
             try {
-                connection.close();
+                if (ps != null) {
+                    ps.close();
+                }
             } catch (SQLException e) {
                 LOGGER.error(e);
+            } finally {
+                try {
+                    if (resultSet != null) {
+                        resultSet.close();
+                    }
+                } catch (SQLException e) {
+                    LOGGER.error(e);
+                } finally {
+                    pool.releaseConnection(connection);
+                }
             }
         }
         return null;
@@ -68,10 +83,14 @@ public class CEODAO implements IDAO<CEO> {
 
     @Override
     public List<CEO> getAll() {
-        Connection connection = ConnectionPool.getInstance().getConnection();
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet resultSet = null;
         try {
-            PreparedStatement ps = connection.prepareStatement(GET_ALL_CEOS);
-            ResultSet resultSet = ps.executeQuery();
+            connection = pool.getConnection();
+            ps = connection.prepareStatement(GET_ALL_CEOS);
+            resultSet = ps.executeQuery();
             List<CEO> ceos = new ArrayList<>();
 
             while (resultSet.next()) {
@@ -83,9 +102,21 @@ public class CEODAO implements IDAO<CEO> {
             LOGGER.error(e);
         } finally {
             try {
-                connection.close();
+                if (ps != null) {
+                    ps.close();
+                }
             } catch (SQLException e) {
                 LOGGER.error(e);
+            } finally {
+                try {
+                    if (resultSet != null) {
+                        resultSet.close();
+                    }
+                } catch (SQLException e) {
+                    LOGGER.error(e);
+                } finally {
+                    pool.releaseConnection(connection);
+                }
             }
         }
         return null;
@@ -93,10 +124,14 @@ public class CEODAO implements IDAO<CEO> {
 
     @Override
     public void insert(CEO ceo) {
-        Connection connection = ConnectionPool.getInstance().getConnection();
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet resultSet = null;
         try {
+            connection = pool.getConnection();
             connection.setAutoCommit(false);
-            PreparedStatement ps = connection.prepareStatement(INSERT_CEO, Statement.RETURN_GENERATED_KEYS);
+            ps = connection.prepareStatement(INSERT_CEO, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, ceo.getFirstName());
             ps.setString(2, ceo.getLastName());
             ps.setInt(3, ceo.getAge());
@@ -105,9 +140,9 @@ public class CEODAO implements IDAO<CEO> {
 
             ps.executeUpdate();
 
-            ResultSet rs = ps.getGeneratedKeys();
-            if (rs.next()) {
-                ceo.setId(rs.getLong(1));
+            resultSet = ps.getGeneratedKeys();
+            if (resultSet.next()) {
+                ceo.setId(resultSet.getLong(1));
             }
 
             connection.commit();
@@ -116,19 +151,34 @@ public class CEODAO implements IDAO<CEO> {
             LOGGER.error(e);
         } finally {
             try {
-                connection.close();
+                if (ps != null) {
+                    ps.close();
+                }
             } catch (SQLException e) {
                 LOGGER.error(e);
+            } finally {
+                try {
+                    if (resultSet != null) {
+                        resultSet.close();
+                    }
+                } catch (SQLException e) {
+                    LOGGER.error(e);
+                } finally {
+                    pool.releaseConnection(connection);
+                }
             }
         }
     }
 
     @Override
     public void update(CEO ceo, Long id) {
-        Connection connection = ConnectionPool.getInstance().getConnection();
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = null;
+        PreparedStatement ps = null;
         try {
+            connection = pool.getConnection();
             connection.setAutoCommit(false);
-            PreparedStatement ps = connection.prepareStatement(UPDATE_CEO);
+            ps = connection.prepareStatement(UPDATE_CEO);
             ps.setString(1, ceo.getFirstName());
             ps.setString(2, ceo.getLastName());
             ps.setInt(3, ceo.getAge());
@@ -143,27 +193,38 @@ public class CEODAO implements IDAO<CEO> {
             LOGGER.error(e);
         } finally {
             try {
-                connection.close();
+                if (ps != null) {
+                    ps.close();
+                }
             } catch (SQLException e) {
                 LOGGER.error(e);
+            } finally {
+                pool.releaseConnection(connection);
             }
         }
     }
 
     @Override
     public void delete(Long id) {
-        Connection connection = ConnectionPool.getInstance().getConnection();
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = null;
+        PreparedStatement ps = null;
         try {
-            PreparedStatement ps = connection.prepareStatement(DELETE_CEO);
+            connection = pool.getConnection();
+            ps = connection.prepareStatement(DELETE_CEO);
             ps.setLong(1, id);
             ps.executeUpdate();
         } catch (SQLException e) {
             LOGGER.error(e);
         } finally {
             try {
-                connection.close();
+                if (ps != null) {
+                    ps.close();
+                }
             } catch (SQLException e) {
                 LOGGER.error(e);
+            } finally {
+                pool.releaseConnection(connection);
             }
         }
     }

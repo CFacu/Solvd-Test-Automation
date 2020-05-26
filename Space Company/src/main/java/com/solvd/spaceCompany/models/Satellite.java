@@ -1,27 +1,20 @@
 package com.solvd.spaceCompany.models;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name = "satellite")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Satellite extends Spacecraft{
-    private SatelliteMissionDate launchDate;
     private Station station;
 
     public Satellite() {
     }
 
     public Satellite(String name, Float weight, Float cargoCapacity, Float fuelCapacity, SatelliteMissionDate launchDate, Station station) {
-        this.launchDate = launchDate;
-        this.setName(name);
-        this.setCargoCapacity(cargoCapacity);
-        this.setFuelCapacity(fuelCapacity);
-        this.setWeight(weight);
+        super(name, weight, cargoCapacity, fuelCapacity);
         this.station = station;
-    }
-
-    public SatelliteMissionDate getLaunchDate() {
-        return launchDate;
-    }
-
-    public void setLaunchDate(SatelliteMissionDate launchDate) {
-        this.launchDate = launchDate;
     }
 
     public Station getStation() {

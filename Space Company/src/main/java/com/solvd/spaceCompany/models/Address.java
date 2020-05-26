@@ -1,9 +1,17 @@
 package com.solvd.spaceCompany.models;
 
+import javax.xml.bind.annotation.*;
+
+@XmlRootElement(name = "address")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Address {
+    @XmlAttribute(name = "id")
     private long id;
+    @XmlElement
     private String city;
+    @XmlElement
     private String street;
+    @XmlElement
     private Integer number;
     private Station station;
 
@@ -55,5 +63,14 @@ public class Address {
 
     public void setStation(Station station) {
         this.station = station;
+    }
+
+    @Override
+    public String toString() {
+        return "Address{" +
+                "city='" + city + '\'' +
+                ", street='" + street + '\'' +
+                ", number=" + number +
+                '}';
     }
 }

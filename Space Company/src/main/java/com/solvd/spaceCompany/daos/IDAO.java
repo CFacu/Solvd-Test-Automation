@@ -1,4 +1,4 @@
-package com.solvd.spaceCompany.daos.interfaces;
+package com.solvd.spaceCompany.daos;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

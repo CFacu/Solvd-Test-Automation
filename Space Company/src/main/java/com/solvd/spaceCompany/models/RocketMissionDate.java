@@ -1,10 +1,14 @@
 package com.solvd.spaceCompany.models;
 
+import javax.xml.bind.annotation.*;
 import java.sql.Date;
-import java.util.List;
 
+@XmlRootElement(name = "rocketMissionDate")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class RocketMissionDate {
+    @XmlAttribute
     private Long id;
+    @XmlElement
     private Date launchDate;
     private Rocket rocket;
     private Mission mission;
