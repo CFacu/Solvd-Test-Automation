@@ -25,14 +25,19 @@ public class StationService {
         return station;
     }
 
+    public List<Station> getStationsByCompanyId(Long id) {
+        List<Station> stations = stationDAO.getAllBySpaceCompanyId(id);
+        stations.forEach(station -> this.updateStation(station));
+        return stations;
+    }
+
     public void updateStation(Station station) {
         station.setAstronauts(astronautDAO.getAllByStationId(station.getId()));
         station.setSatellites(satelliteDAO.getAllByStationId(station.getId()));
     }
 
     public List<Station> getAllStations() {
-        List<Station> stations = new ArrayList<>();
-        stations = stationDAO.getAll();
+        List<Station> stations = stationDAO.getAll();
         stations.forEach(station -> this.updateStation(station));
         return stations;
     }

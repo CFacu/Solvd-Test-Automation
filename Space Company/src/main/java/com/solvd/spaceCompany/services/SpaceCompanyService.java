@@ -14,12 +14,14 @@ public class SpaceCompanyService {
     private EngineerDAO engineerDAO;
     private RocketDAO rocketDAO;
     private StationDAO stationDAO;
+    private StationService statService;
 
     public SpaceCompanyService() {
         this.spaceCompanyDAO = new SpaceCompanyDAO();
         this.engineerDAO = new EngineerDAO();
         this.rocketDAO = new RocketDAO();
         this.stationDAO = new StationDAO();
+        this.statService = new StationService();
     }
 
     public SpaceCompany getSpaceCompany(Long id) {
@@ -31,7 +33,7 @@ public class SpaceCompanyService {
     public void updateSpaceCompany(SpaceCompany spaceCompany) {
         spaceCompany.setEngineers(engineerDAO.getAllBySpaceCompanyId(spaceCompany.getId()));
         spaceCompany.setRockets(rocketDAO.getAllBySpaceCompanyId(spaceCompany.getId()));
-        spaceCompany.setStations(stationDAO.getAllBySpaceCompanyId(spaceCompany.getId()));
+        spaceCompany.setStations(statService.getStationsByCompanyId(spaceCompany.getId()));
     }
 
     public List<SpaceCompany> getAllSpaceCompany() {
