@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.solvd.spaceCompany.daos.IStationDAO">
+    <resultMap id="StationMap" type="Station" autoMapping="false">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <association property="spaceCompany" javaType="SpaceCompany" resultMap="com.solvd.spaceCompany.daos.ISpaceCompanyDAO.SpaceCompanyMap"/>
+        <collection property="satellites" ofType="Satellite" resultMap="com.solvd.spaceCompany.daos.ISatelliteDAO.SatelliteMap" columnPrefix="satellite_"/>
+        <collection property="astronauts" ofType="Astronaut" resultMap="com.solvd.spaceCompany.daos.IAstronautDAO.AstronautMap" columnPrefix="astronaut_"/>
+    </resultMap>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="Station">
+        <![CDATA[
+            INSERT INTO Stations (name, space_company_id)
+            VALUES (#{obj.name}, #{obj.spaceCompany.id})
+        ]]>
+    </insert>
+    <delete id="delete">
+        <![CDATA[
+            DELETE FROM Stations s WHERE s.id=#{id}
+        ]]>
+    </delete>
+    <update id="update">
+        <![CDATA[
+            UPDATE Stations s SET
+            name=#{obj.name}, space_company_id=#{obj.spaceCompany.id} WHERE s.id=#{id}
+        ]]>
+    </update>
+    <select id="get" resultType="Station" resultMap="StationMap">
+        <![CDATA[
+            SELECT * FROM Stations s
+            WHERE s.id=#{id}
+        ]]>
+    </select>
+    <select id="getAll" resultType="Station" resultMap="StationMap">
+        <![CDATA[
+            SELECT * FROM Stations;
+        ]]>
+    </select>
+    <select id="getAllBySpaceCompanyId" resultType="Station" resultMap="StationMap">
+        <![CDATA[
+            SELECT * FROM Stations s
+            WHERE s.space_company_id = #{id}
+        ]]>
+    </select>
+</mapper>

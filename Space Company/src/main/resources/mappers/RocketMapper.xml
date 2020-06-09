@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.solvd.spaceCompany.daos.IRocketDAO">
+    <resultMap id="RocketMap" type="Rocket" autoMapping="false">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="weight" column="weight"/>
+        <result property="fuelCapacity" column="fuel_capacity"/>
+        <result property="cargoCapacity" column="cargo_capacity"/>
+        <result property="passengerCapacity" column="passenger_capacity"/>
+        <association property="spaceCompany" javaType="SpaceCompany" resultMap="com.solvd.spaceCompany.daos.ISpaceCompanyDAO.SpaceCompanyMap"/>
+    </resultMap>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="Rocket">
+        <![CDATA[
+            INSERT INTO Rockets (name, weight, fuel_capacity, passengers_capacity, cargo_capacity, space_company_id)
+            VALUES (#{obj.name}, #{obj.weight}, #{obj.fuelCapacity}, #{obj.passengersCapacity}, #{obj.cargoCapacity}, #{obj.spaceCompany.id}
+        ]]>
+    </insert>
+    <delete id="delete">
+        <![CDATA[
+            DELETE FROM Rockets m WHERE m.id=#{id}
+        ]]>
+    </delete>
+    <update id="update">
+        <![CDATA[
+            UPDATE Rockets r SET
+            name=#{obj.name}, weight=#{obj.weight}, fuel_capacity=#{obj.fuelCapacity}, passenger_capacity=#{obj.passengerCapacity}, cargo_capacity=#{obj.cargoCapacity}, space_company_id=#{obj.spaceCompany.id}
+            WHERE r.id=#{id}
+        ]]>
+    </update>
+    <select id="get" resultType="Rocket" resultMap="RocketMap">
+        <![CDATA[
+            SELECT * FROM Rockets r
+            WHERE r.id=#{id}
+        ]]>
+    </select>
+    <select id="getAll" resultType="Rocket" resultMap="RocketMap">
+        <![CDATA[
+            SELECT * FROM Rockets;
+        ]]>
+    </select>
+    <select id="getAllBySpaceCompanyId" resultType="Rocket" resultMap="RocketMap">
+        <![CDATA[
+            SELECT * FROM Rockets r
+            WHERE r.space_company_id = #{id}
+        ]]>
+    </select>
+</mapper>

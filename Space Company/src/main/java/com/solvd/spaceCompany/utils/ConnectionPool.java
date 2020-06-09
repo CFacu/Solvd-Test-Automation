@@ -1,4 +1,4 @@
-package com.solvd.spaceCompany;
+package com.solvd.spaceCompany.utils;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

@@ -1,6 +1,6 @@
 package com.solvd.spaceCompany.daos.mysqlImpl;
 
-import com.solvd.spaceCompany.ConnectionPool;
+import com.solvd.spaceCompany.utils.ConnectionPool;
 import com.solvd.spaceCompany.daos.ISatelliteDAO;
 import com.solvd.spaceCompany.models.Satellite;
 import org.apache.logging.log4j.LogManager;
@@ -28,7 +28,7 @@ public class SatelliteDAO implements ISatelliteDAO {
                     "SET name = ?, weight = ?, cargo_capacity = ?, fuel_capacity = ?, stations_id = ? WHERE id = ?";
 
     private static final String DELETE_SATELLITE =
-            "DELETE Satellites " +
+            "DELETE FROM Satellites " +
                     "WHERE id=?";
 
     private static final String GET_ALL_BY_STATION_ID =

@@ -1,6 +1,6 @@
 package com.solvd.spaceCompany.daos.mysqlImpl;
 
-import com.solvd.spaceCompany.ConnectionPool;
+import com.solvd.spaceCompany.utils.ConnectionPool;
 import com.solvd.spaceCompany.daos.IRocketDAO;
 import com.solvd.spaceCompany.models.Rocket;
 import org.apache.logging.log4j.LogManager;
@@ -28,7 +28,7 @@ public class RocketDAO implements IRocketDAO {
                     "SET name = ?, weight = ?, fuel_capacity = ?, passengers_capacity = ?, cargo_capacity = ?, space_company_id = ? WHERE id = ?";
 
     private static final String DELETE_ROCKET =
-            "DELETE Rockets " +
+            "DELETE FROM Rockets " +
                     "WHERE id=?";
 
     private static final String GET_ALL_BY_SPACE_COMPANY_ID =

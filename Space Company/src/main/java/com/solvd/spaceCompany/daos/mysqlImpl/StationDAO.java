@@ -1,6 +1,6 @@
 package com.solvd.spaceCompany.daos.mysqlImpl;
 
-import com.solvd.spaceCompany.ConnectionPool;
+import com.solvd.spaceCompany.utils.ConnectionPool;
 import com.solvd.spaceCompany.daos.IStationDAO;
 import com.solvd.spaceCompany.models.Station;
 import org.apache.logging.log4j.LogManager;
@@ -28,7 +28,7 @@ public class StationDAO implements IStationDAO {
                     "SET name = ?, space_company_id = ? WHERE id = ?";
 
     private static final String DELETE_STATION =
-            "DELETE Stations " +
+            "DELETE FROM Stations " +
                     "WHERE id = ?";
 
     private static final String GET_ALL_BY_SPACE_COMPANY_ID =

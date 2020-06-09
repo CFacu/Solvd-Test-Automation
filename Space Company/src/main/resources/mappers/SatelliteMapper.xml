@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.solvd.spaceCompany.daos.ISatelliteDAO">
+    <resultMap id="SatelliteMap" type="Satellite" autoMapping="false">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="weight" column="weight"/>
+        <result property="fuelCapacity" column="fuel_capacity"/>
+        <result property="cargoCapacity" column="cargo_capacity"/>
+        <association property="station" javaType="Station" resultMap="com.solvd.spaceCompany.daos.IStationDAO.StationMap"/>
+    </resultMap>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="Satellite">
+        <![CDATA[
+            INSERT INTO Satellites (name, weight, fuel_capacity, cargo_capacity, stations_id)
+            VALUES (#{obj.name}, #{obj.weight}, #{obj.fuelCapacity}, #{obj.cargoCapacity}, #{obj.station.id}
+        ]]>
+    </insert>
+    <delete id="delete">
+        <![CDATA[
+            DELETE FROM Satellites s WHERE s.id=#{id}
+        ]]>
+    </delete>
+    <update id="update">
+        <![CDATA[
+            UPDATE Satellites s SET
+            name=#{obj.name}, weight=#{obj.weight}, fuel_capacity=#{obj.fuelCapacity}, cargo_capacity=#{obj.cargoCapacity}, stations_id=#{obj.station.id}
+            WHERE s.id=#{id}
+        ]]>
+    </update>
+    <select id="get" resultType="Satellite" resultMap="SatelliteMap">
+        <![CDATA[
+            SELECT * FROM Satellites s
+            WHERE s.id=#{id}
+        ]]>
+    </select>
+    <select id="getAll" resultType="Satellite" resultMap="SatelliteMap">
+        <![CDATA[
+            SELECT * FROM Satellites;
+        ]]>
+    </select>
+    <select id="getAllByStationId" resultType="Satellite" resultMap="SatelliteMap">
+        <![CDATA[
+            SELECT * FROM Satellites s
+            WHERE s.stations_id = #{id}
+        ]]>
+    </select>
+</mapper>

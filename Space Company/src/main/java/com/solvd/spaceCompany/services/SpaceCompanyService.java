@@ -1,26 +1,26 @@
 package com.solvd.spaceCompany.services;
 
+import com.solvd.spaceCompany.daos.*;
 import com.solvd.spaceCompany.daos.mysqlImpl.EngineerDAO;
 import com.solvd.spaceCompany.daos.mysqlImpl.RocketDAO;
-import com.solvd.spaceCompany.daos.mysqlImpl.SpaceCompanyDAO;
 import com.solvd.spaceCompany.daos.mysqlImpl.StationDAO;
 import com.solvd.spaceCompany.models.SpaceCompany;
+import com.solvd.spaceCompany.utils.ConnectionFactory;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SpaceCompanyService {
-    private SpaceCompanyDAO spaceCompanyDAO;
-    private EngineerDAO engineerDAO;
-    private RocketDAO rocketDAO;
-    private StationDAO stationDAO;
+    private ISpaceCompanyDAO spaceCompanyDAO;
+    private IEngineerDAO engineerDAO;
+    private IRocketDAO rocketDAO;
+    private IStationDAO stationDAO;
     private StationService statService;
 
     public SpaceCompanyService() {
-        this.spaceCompanyDAO = new SpaceCompanyDAO();
-        this.engineerDAO = new EngineerDAO();
-        this.rocketDAO = new RocketDAO();
-        this.stationDAO = new StationDAO();
+        this.spaceCompanyDAO = ConnectionFactory.getSpaceCompanyMapper();
+        this.engineerDAO = ConnectionFactory.getEngineerMapper();
+        this.rocketDAO = ConnectionFactory.getRocketMapper();
+        this.stationDAO = ConnectionFactory.getStationMapper();
         this.statService = new StationService();
     }
 
@@ -37,8 +37,7 @@ public class SpaceCompanyService {
     }
 
     public List<SpaceCompany> getAllSpaceCompany() {
-        List<SpaceCompany> spaceCompanies = new ArrayList<>();
-        spaceCompanies = spaceCompanyDAO.getAll();
+        List<SpaceCompany> spaceCompanies = spaceCompanyDAO.getAll();
         spaceCompanies.forEach(comp -> this.updateSpaceCompany(comp));
         return spaceCompanies;
     }

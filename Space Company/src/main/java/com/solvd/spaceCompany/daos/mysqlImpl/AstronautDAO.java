@@ -1,6 +1,6 @@
 package com.solvd.spaceCompany.daos.mysqlImpl;
 
-import com.solvd.spaceCompany.ConnectionPool;
+import com.solvd.spaceCompany.utils.ConnectionPool;
 import com.solvd.spaceCompany.daos.IAstronautDAO;
 import com.solvd.spaceCompany.models.Astronaut;
 import org.apache.logging.log4j.LogManager;
@@ -29,7 +29,7 @@ public class AstronautDAO implements IAstronautDAO {
                     "SET first_name = ?, last_name = ?, age = ?, duty = ?, stations_id = ? WHERE id = ?";
 
     private static final String DELETE_ASTRONAUT =
-            "DELETE Astronauts " +
+            "DELETE FROM Astronauts " +
                     "WHERE id = ?";
 
     private static final String GET_ALL_BY_STATION_ID =

@@ -1,22 +1,25 @@
 package com.solvd.spaceCompany.services;
 
+import com.solvd.spaceCompany.daos.IAstronautDAO;
+import com.solvd.spaceCompany.daos.ISatelliteDAO;
+import com.solvd.spaceCompany.daos.IStationDAO;
 import com.solvd.spaceCompany.daos.mysqlImpl.AstronautDAO;
 import com.solvd.spaceCompany.daos.mysqlImpl.SatelliteDAO;
 import com.solvd.spaceCompany.daos.mysqlImpl.StationDAO;
 import com.solvd.spaceCompany.models.Station;
+import com.solvd.spaceCompany.utils.ConnectionFactory;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class StationService {
-    private StationDAO stationDAO;
-    private SatelliteDAO satelliteDAO;
-    private AstronautDAO astronautDAO;
+    private IStationDAO stationDAO;
+    private ISatelliteDAO satelliteDAO;
+    private IAstronautDAO astronautDAO;
 
     public StationService() {
-        this.stationDAO = new StationDAO();
-        this.satelliteDAO = new SatelliteDAO();
-        this.astronautDAO = new AstronautDAO();
+        this.stationDAO = ConnectionFactory.getStationMapper();
+        this.satelliteDAO = ConnectionFactory.getSatelliteMapper();
+        this.astronautDAO = ConnectionFactory.getAstronautMapper();
     }
 
     public Station getStation(Long id) {

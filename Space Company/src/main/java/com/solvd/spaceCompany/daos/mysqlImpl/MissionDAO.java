@@ -1,7 +1,7 @@
 package com.solvd.spaceCompany.daos.mysqlImpl;
 
-import com.solvd.spaceCompany.ConnectionPool;
-import com.solvd.spaceCompany.daos.IDAO;
+import com.solvd.spaceCompany.utils.ConnectionPool;
+import com.solvd.spaceCompany.daos.IMissionDAO;
 import com.solvd.spaceCompany.models.Mission;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -10,7 +10,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MissionDAO implements IDAO<Mission> {
+public class MissionDAO implements IMissionDAO {
     private final Logger LOGGER = LogManager.getLogger(MissionDAO.class);
 
     private static final String INSERT_MISSION =

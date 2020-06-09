@@ -1,4 +1,4 @@
-package com.solvd.spaceCompany.parsers.dom;
+package com.solvd.spaceCompany.utils.parsers.dom;
 
 import com.solvd.spaceCompany.models.SpaceCompany;
 import org.apache.logging.log4j.LogManager;

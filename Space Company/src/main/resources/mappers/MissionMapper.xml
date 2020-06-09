@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.solvd.spaceCompany.daos.IMissionDAO">
+    <resultMap id="MissionMap" type="Mission" autoMapping="false">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="objective" column="objective"/>
+        <result property="span" column="span"/>
+        <collection property="rockets" ofType="Rocket" resultMap="com.solvd.spaceCompany.daos.IRocketDAO.RocketMap" columnPrefix="rocket_"/>
+        <collection property="satellites" ofType="Satellite" resultMap="com.solvd.spaceCompany.daos.ISatelliteDAO.SatelliteMap" columnPrefix="satellite_"/>
+    </resultMap>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="Mission">
+        <![CDATA[
+            INSERT INTO Missions (name, objective, span_in_years)
+            VALUES (#{obj.name}, #{obj.objective}, #{obj.span}
+        ]]>
+    </insert>
+    <delete id="delete">
+        <![CDATA[
+            DELETE FROM Missions m WHERE m.id=#{id}
+        ]]>
+    </delete>
+    <update id="update">
+        <![CDATA[
+            UPDATE Missions m SET name=#{obj.name}, objective=#{obj.objective}, span_in_years=#{obj.span} WHERE m.id=#{id}
+        ]]>
+    </update>
+    <select id="get" resultType="Mission" resultMap="MissionMap">
+        <![CDATA[
+            SELECT * FROM Missions m
+            WHERE m.id=#{id}
+        ]]>
+    </select>
+    <select id="getAll" resultType="Mission" resultMap="MissionMap">
+        <![CDATA[
+            SELECT * FROM Missions;
+        ]]>
+    </select>
+</mapper>

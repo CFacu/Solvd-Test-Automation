@@ -1,6 +1,6 @@
 package com.solvd.spaceCompany.daos.mysqlImpl;
 
-import com.solvd.spaceCompany.ConnectionPool;
+import com.solvd.spaceCompany.utils.ConnectionPool;
 import com.solvd.spaceCompany.daos.IDAO;
 import com.solvd.spaceCompany.models.RocketMissionDate;
 import org.apache.logging.log4j.LogManager;
@@ -28,7 +28,7 @@ public class RocketMissionDateDAO implements IDAO<RocketMissionDate> {
                     "SET launch_date = ?, rocket_id = ?, mission_id = ? WHERE id = ?";
 
     private static final String DELETE_ROCKET_MISSION_DATE =
-            "DELETE Rocket_Mission_Date " +
+            "DELETE FROM Rocket_Mission_Date " +
                     "WHERE id=?";
 
     @Override
