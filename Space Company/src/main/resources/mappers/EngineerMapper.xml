@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.solvd.spaceCompany.daos.IEngineerDAO">
+    <resultMap id="EngineerMap" type="Engineer" autoMapping="false">
+        <id property="id" column="id"/>
+        <result property="firstName" column="first_name"/>
+        <result property="lastName" column="last_name"/>
+        <result property="age" column="age"/>
+        <result property="speciality" column="speciality"/>
+        <association property="spaceCompany"  javaType="SpaceCompany" resultMap="com.solvd.spaceCompany.daos.ISpaceCompanyDAO.SpaceCompanyMap"/>
+    </resultMap>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="Engineer">
+        <![CDATA[
+            INSERT INTO Engineers (first_name, last_name, age, speciality, space_company_id)
+            VALUES (#{obj.first_name}, #{obj.last_name}, #{obj.age}, #{obj.speciality}, #{obj.space_company.id})
+        ]]>
+    </insert>
+    <delete id="delete">
+        <![CDATA[
+            DELETE FROM Engineers e WHERE e.id=#{id}
+        ]]>
+    </delete>
+    <update id="update">
+        <![CDATA[
+            UPDATE Engineers e SET first_name=#{obj.first_name}, last_name=#{obj.last_name}, age=#{obj.age}, email=#{obj.email}, space_company_id#{obj.space_company.id} WHERE e.id=#{id}
+        ]]>
+    </update>
+    <select id="get" resultType="Engineer" resultMap="EngineerMap">
+        <![CDATA[
+            SELECT * FROM Engineers e
+            LEFT JOIN Space_Company s
+            ON s.id=e.space_company_id
+            WHERE e.id=#{id}
+        ]]>
+    </select>
+    <select id="getAll" resultType="Engineer" resultMap="EngineerMap">
+        <![CDATA[
+            SELECT * FROM Engineers;
+        ]]>
+    </select>
+    <select id="getAllBySpaceCompanyId" resultType="Engineer" resultMap="EngineerMap">
+        <![CDATA[
+            SELECT * FROM Engineers e
+            WHERE e.space_company_id = #{id}
+        ]]>
+    </select>
+</mapper>

@@ -1,8 +1,6 @@
-package com.solvd.spaceCompany.parsers.jaxb;
+package com.solvd.spaceCompany.utils.parsers.jaxb;
 
-import com.solvd.spaceCompany.models.Satellite;
 import com.solvd.spaceCompany.models.SpaceCompany;
-import com.solvd.spaceCompany.models.Station;
 import com.solvd.spaceCompany.services.SpaceCompanyService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,8 +10,6 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 public class JaxbParser {
     private static final Logger LOGGER = LogManager.getLogger(JaxbParser.class);

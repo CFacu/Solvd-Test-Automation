@@ -1,6 +1,6 @@
 package com.solvd.spaceCompany.daos.mysqlImpl;
 
-import com.solvd.spaceCompany.ConnectionPool;
+import com.solvd.spaceCompany.utils.ConnectionPool;
 import com.solvd.spaceCompany.daos.IEngineerDAO;
 import com.solvd.spaceCompany.models.Engineer;
 import org.apache.logging.log4j.LogManager;
@@ -28,7 +28,7 @@ public class EngineerDAO implements IEngineerDAO {
                     "SET first_name = ?, last_name = ?, age = ?, speciality = ?, space_company_id = ? WHERE id=?";
 
     private static final String DELETE_ENGINEER =
-            "DELETE Engineers " +
+            "DELETE FROM Engineers " +
                     "WHERE id=?";
 
     private static final String GET_ALL_BY_SPACE_COMPANY_ID =

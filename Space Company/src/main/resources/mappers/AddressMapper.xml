@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.solvd.spaceCompany.daos.IAddressDAO">
+    <resultMap id="AddressMap" type="Address" autoMapping="false">
+        <id property="id" column="id"/>
+        <result property="city" column="city"/>
+        <result property="street" column="street"/>
+        <result property="number" column="number"/>
+        <association property="station" javaType="com.solvd.spaceCompany.models.Station" resultMap="com.solvd.spaceCompany.daos.IStationDAO.StationMap"/>
+    </resultMap>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="Address">
+        <![CDATA[
+            INSERT INTO Addresses (city, street, number, stations_id)
+            VALUES (#{obj.city}, #{obj.street}, #{obj.number}, #{obj.station.id})
+        ]]>
+    </insert>
+    <delete id="delete">
+        <![CDATA[
+            DELETE FROM Addresses a WHERE a.id=#{id}
+        ]]>
+    </delete>
+    <update id="update">
+        <![CDATA[
+            UPDATE Addresses a SET city = #{obj.city}, street = #{obj.street}, number = #{obj.number}, stations_id = #{obj.station.id} WHERE a.id=#{id}
+        ]]>
+    </update>
+    <select id="get" resultType="Address" resultMap="AddressMap">
+        <![CDATA[
+            SELECT * FROM Addresses a
+            LEFT JOIN Stations s
+            ON s.id=a.stations_id
+            WHERE a.id=#{id}
+        ]]>
+    </select>
+    <select id="getAll" resultType="Address" resultMap="AddressMap">
+        <![CDATA[
+            SELECT * FROM Addresses;
+        ]]>
+    </select>
+    <select id="getAddressesByStationId" resultType="Address" resultMap="AddressMap">
+        <![CDATA[
+            SELECT * FROM Addresses a
+            WHERE a.stations_id = #{id}
+        ]]>
+    </select>
+</mapper>

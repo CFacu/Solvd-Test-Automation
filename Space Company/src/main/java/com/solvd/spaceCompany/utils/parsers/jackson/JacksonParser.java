@@ -1,4 +1,4 @@
-package com.solvd.spaceCompany.parsers.jackson;
+package com.solvd.spaceCompany.utils.parsers.jackson;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.solvd.spaceCompany.models.SpaceCompany;

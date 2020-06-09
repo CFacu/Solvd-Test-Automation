@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <properties resource="jdbc.properties"/>
+    <typeAliases>
+        <typeAlias type="com.solvd.spaceCompany.models.Address" alias="Address"/>
+        <typeAlias type="com.solvd.spaceCompany.models.Astronaut" alias="Astronaut"/>
+        <typeAlias type="com.solvd.spaceCompany.models.SpaceCompany" alias="SpaceCompany"/>
+        <typeAlias type="com.solvd.spaceCompany.models.Engineer" alias="Engineer"/>
+        <typeAlias type="com.solvd.spaceCompany.models.Rocket" alias="Rocket"/>
+        <typeAlias type="com.solvd.spaceCompany.models.Station" alias="Station"/>
+        <typeAlias type="com.solvd.spaceCompany.models.CEO" alias="CEO"/>
+        <typeAlias type="com.solvd.spaceCompany.models.Satellite" alias="Satellite"/>
+        <typeAlias type="com.solvd.spaceCompany.models.Mission" alias="Mission"/>
+    </typeAliases>
+    <environments default="dev">
+        <environment id="dev">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="${driver}"/>
+                <property name="url" value="${url}"/>
+                <property name="username" value="${user}"/>
+                <property name="password" value="${pass}"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <mappers>
+        <mapper resource="mappers/AddressMapper.xml"/>
+        <mapper resource="mappers/AstronautMapper.xml"/>
+        <mapper resource="mappers/CEOMapper.xml"/>
+        <mapper resource="mappers/EngineerMapper.xml"/>
+        <mapper resource="mappers/MissionMapper.xml"/>
+        <mapper resource="mappers/RocketMapper.xml"/>
+        <mapper resource="mappers/SatelliteMapper.xml"/>
+        <mapper resource="mappers/SpaceCompanyMapper.xml"/>
+        <mapper resource="mappers/StationMapper.xml"/>
+    </mappers>
+</configuration>

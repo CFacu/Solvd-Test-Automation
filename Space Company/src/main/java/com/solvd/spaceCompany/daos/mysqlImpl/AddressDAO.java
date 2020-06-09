@@ -1,6 +1,6 @@
 package com.solvd.spaceCompany.daos.mysqlImpl;
 
-import com.solvd.spaceCompany.ConnectionPool;
+import com.solvd.spaceCompany.utils.ConnectionPool;
 import com.solvd.spaceCompany.daos.IAddressDAO;
 import com.solvd.spaceCompany.models.Address;
 import org.apache.logging.log4j.LogManager;
@@ -29,7 +29,7 @@ public class AddressDAO implements IAddressDAO {
                     "SET city = ?, street= ?, number= ?, stations_id = ? WHERE id=?";
 
     private static final String DELETE_ADDRESS =
-            "DELETE Addresses " +
+            "DELETE FROM Addresses " +
                     "WHERE id=?";
 
     private static final String GET_ADDRESS_BY_STATION_ID =
@@ -229,7 +229,7 @@ public class AddressDAO implements IAddressDAO {
     }
 
     @Override
-    public Address getAddressByStationId(Long id) {
+    public List<Address> getAddressesByStationId(Long id) {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = null;
         PreparedStatement ps = null;
@@ -239,9 +239,13 @@ public class AddressDAO implements IAddressDAO {
             ps = connection.prepareStatement(GET_ADDRESS_BY_STATION_ID);
             ps.setLong(1, id);
             resultSet = ps.executeQuery();
+            List<Address> addresses = new ArrayList<>();
+
             while (resultSet.next()) {
-                return extractFromResultSet(resultSet);
+                Address address = extractFromResultSet(resultSet);
+                addresses.add(address);
             }
+            return addresses;
         } catch (SQLException e) {
             LOGGER.error(e);
         } finally {

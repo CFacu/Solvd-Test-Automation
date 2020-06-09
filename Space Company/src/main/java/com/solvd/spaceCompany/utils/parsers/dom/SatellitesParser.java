@@ -1,7 +1,6 @@
-package com.solvd.spaceCompany.parsers.dom;
+package com.solvd.spaceCompany.utils.parsers.dom;
 
 import com.solvd.spaceCompany.models.Satellite;
-import com.solvd.spaceCompany.models.Station;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;

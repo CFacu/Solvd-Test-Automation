@@ -1,7 +1,7 @@
 package com.solvd.spaceCompany.daos.mysqlImpl;
 
-import com.solvd.spaceCompany.ConnectionPool;
-import com.solvd.spaceCompany.daos.IDAO;
+import com.solvd.spaceCompany.utils.ConnectionPool;
+import com.solvd.spaceCompany.daos.ICEODAO;
 import com.solvd.spaceCompany.models.CEO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -10,7 +10,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CEODAO implements IDAO<CEO> {
+public class CEODAO implements ICEODAO {
 
     private final Logger LOGGER = LogManager.getLogger(CEODAO.class);
 
@@ -29,7 +29,7 @@ public class CEODAO implements IDAO<CEO> {
                     "SET first_name = ?, last_name = ?, age = ?, email = ?, space_company_id = ? WHERE id=?";
 
     private static final String DELETE_CEO =
-            "DELETE CEO " +
+            "DELETE FROM CEO " +
                     "WHERE id=?";
 
     @Override
