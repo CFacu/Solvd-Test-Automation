@@ -87,18 +87,18 @@ SELECT * FROM space_company.missions m
 LEFT JOIN space_company.rocket_mission_date rmd on m.id = rmd.missions_id
 LEFT JOIN space_company.rockets r on r.id = rmd.rockets_id
 GROUP BY m.id
-HAVING m.name = 'Apollo Program';
+HAVING AVG(r.weight) > 2000;
 
 SELECT * FROM space_company.missions m
 LEFT JOIN space_company.satellite_mission_date smd on m.id = smd.missions_id
 LEFT JOIN space_company.satellites s on s.id = smd.satellites_id
 GROUP BY m.id
-HAVING m.name = 'Mercury Program';
+HAVING COUNT(m.id) <= 5;
 
 SELECT * FROM space_company.engineers e
 LEFT JOIN space_company.space_company sc on sc.id = e.space_company_id
 GROUP BY e.id
-HAVING e.space_company_id = 1;
+HAVING AVG(e.age) > 30;
 
 SELECT * FROM space_company.astronauts a
 LEFT JOIN space_company.stations s on s.id = a.stations_id
@@ -108,21 +108,8 @@ HAVING a.age > 38;
 SELECT * FROM space_company.satellites s
 LEFT JOIN space_company.stations st on st.id = s.stations_id
 GROUP BY s.id
-HAVING s.weight > 10000;
+HAVING AVG(s.fuel_capacity) < 30000;
 
-SELECT * FROM space_company.rockets r
-LEFT JOIN space_company.space_company sc on sc.id = r.space_company_id
-GROUP BY r.id
-HAVING r.weight < 30000;
-
-SELECT AVG(r.fuel_capacity) FROM space_company.rockets r
-WHERE r.space_company_id = 1;
-
-SELECT SUM(s.weight) FROM space_company.satellites s
-WHERE s.stations_id = 3;
-
-SELECT COUNT(s.cargo_capacity) FROM space_company.satellites s
-WHERE s.stations_id = 2 AND s.cargo_capacity > 2000;
 
 ------------JOIN ALL TABLES------------
 
